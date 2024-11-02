@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import {
   Github,
-  Linkedin,
-  Mail,
   ExternalLink,
   Menu,
   X,
   Globe
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import translations from './utils/translations';
+import translations, { LanguageTranslations } from './utils/translations';
+import socialLinks from './utils/contacts';
 
 const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState('es');
+  const [language, setLanguage] = useState<keyof LanguageTranslations>(
+    navigator.language.startsWith("es") ? "es" : "en"
+  );
   const t = translations[language];
 
   // Animation variants
@@ -87,10 +88,10 @@ const Portfolio = () => {
                   className="flex space-x-8"
                 >
                   {[
-                    ['#inicio', t.nav.home],
-                    ['#proyectos', t.nav.projects],
-                    ['#sobre-mi', t.nav.about],
-                    ['#contacto', t.nav.contact]
+                    ['#home', t.nav.home],
+                    ['#projects', t.nav.projects],
+                    ['#about', t.nav.about],
+                    ['#contact', t.nav.contact]
                   ].map(([href, text]) => (
                     <motion.a
                       key={href}
@@ -183,11 +184,7 @@ const Portfolio = () => {
               initial="initial"
               animate="animate"
             >
-              {[
-                ['https://github.com', <Github size={24} />],
-                ['https://linkedin.com', <Linkedin size={24} />],
-                ['mailto:tu@email.com', <Mail size={24} />]
-              ].map(([href, icon], index) => (
+              {socialLinks.map(([href, icon], index) => (
                 <motion.a
                   key={href}
                   href={href}
@@ -279,7 +276,7 @@ const Portfolio = () => {
                   <h3 className="mb-4 text-xl font-bold">{t.about.skills}</h3>
                   <div className="flex flex-wrap gap-2">
                     {['React', 'Node.js', 'TypeScript', 'Python', 'SQL', 'AWS'].map((skill) => (
-                      <span 
+                      <span
                         key={skill}
                         className="px-3 py-1 bg-[#0d1117] border border-zinc-800 rounded-full text-sm"
                       >
@@ -289,11 +286,13 @@ const Portfolio = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="mb-4 text-xl font-bold">Experiencia</h3>
+                  <h3 className="mb-4 text-xl font-bold">{ }</h3>
                   <ul className="space-y-2 text-zinc-300">
-                    <li>• Desarrollador Senior - Empresa X</li>
-                    <li>• Tech Lead - Startup Y</li>
-                    <li>• Freelance Developer</li>
+                    {
+                      t.about.roles.map(rol => (
+                        <li>• {rol}</li>
+                      ))
+                    }
                   </ul>
                 </div>
               </div>
@@ -304,52 +303,37 @@ const Portfolio = () => {
         {/* Contacto */}
         <section id="contacto" className="py-20">
           <div className="max-w-4xl px-4 mx-auto">
-            <h2 className="mb-12 text-3xl font-bold text-center md:text-4xl">Contacto</h2>
+            <h2 className="mb-12 text-3xl font-bold text-center md:text-4xl">{t.contact.title}</h2>
             <div className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg p-8">
               <form className="space-y-6">
                 <div>
-                  <label className="block mb-2 text-sm font-medium">Nombre</label>
-                  <input 
+                  <label className="block mb-2 text-sm font-medium">{t.contact.name}</label>
+                  <input
                     type="text"
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium">Email</label>
-                  <input 
+                  <label className="block mb-2 text-sm font-medium">{t.contact.email}</label>
+                  <input
                     type="email"
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block mb-2 text-sm font-medium">Mensaje</label>
-                  <textarea 
+                  <label className="block mb-2 text-sm font-medium">{t.contact.message}</label>
+                  <textarea
                     rows={4}
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   ></textarea>
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="w-full py-3 bg-gradient-to-r from-[#2F81F7] to-[#238636] rounded-lg font-medium hover:opacity-90 transition-opacity"
                 >
-                  Enviar Mensaje
+                  {t.contact.send}
                 </button>
               </form>
-              
-              <div className="mt-12 text-center">
-                <p className="mb-4 text-zinc-400">También puedes encontrarme en:</p>
-                <div className="flex justify-center space-x-6">
-                  <a href="mailto:tu@email.com" className="text-zinc-300 hover:text-[#2F81F7] transition-colors">
-                    tu@email.com
-                  </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-[#2F81F7] transition-colors">
-                    LinkedIn
-                  </a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:text-[#2F81F7] transition-colors">
-                    GitHub
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -357,7 +341,7 @@ const Portfolio = () => {
         {/* Footer */}
         <footer className="py-8 text-center text-zinc-400">
           <div className="max-w-6xl px-4 mx-auto">
-            <p>© {new Date().getFullYear()} Nicolas Rivera. Todos los derechos reservados.</p>
+            <p>© {new Date().getFullYear()} Nicolas Rivera. {t.footer.rights}</p>
           </div>
         </footer>
       </div>

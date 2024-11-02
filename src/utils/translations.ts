@@ -1,4 +1,4 @@
-interface Translations {
+  interface Translations {
     nav: {
       home: string;
       projects: string;
@@ -21,7 +21,7 @@ interface Translations {
       description: string;
       skills: string;
       experience: string;
-      roles: string[];
+      roles: readonly string[];
     };
     contact: {
       title: string;
@@ -29,14 +29,13 @@ interface Translations {
       email: string;
       message: string;
       send: string;
-      findMe: string;
     };
     footer: {
       rights: string;
     };
   }
   
-  interface LanguageTranslations {
+  export interface LanguageTranslations {
     en: Translations;
     es: Translations;
   }
@@ -76,8 +75,7 @@ interface Translations {
         name: "Name",
         email: "Email",
         message: "Message",
-        send: "Send Message",
-        findMe: "You can also find me on:"
+        send: "Send Message"
       },
       footer: {
         rights: "All rights reserved."
@@ -117,13 +115,12 @@ interface Translations {
         name: "Nombre",
         email: "Email",
         message: "Mensaje",
-        send: "Enviar Mensaje",
-        findMe: "También puedes encontrarme en:"
+        send: "Enviar Mensaje"
       },
       footer: {
         rights: "Todos los derechos reservados."
       }
     }
-  };
+  } as const;
   
 export default translations;  
