@@ -1,7 +1,7 @@
-  interface Translations {
+  export interface Translations {
     nav: {
-      home: string;
       projects: string;
+      skills: string;
       about: string;
       contact: string;
     };
@@ -43,8 +43,8 @@
   const translations: LanguageTranslations = {
     en: {
       nav: {
-        home: "Home",
         projects: "Projects",
+        skills: "Skills",
         about: "About",
         contact: "Contact"
       },
@@ -83,8 +83,8 @@
     },
     es: {
       nav: {
-        home: "Inicio",
         projects: "Proyectos",
+        skills: "Habilidades",
         about: "Sobre Mí",
         contact: "Contacto"
       },
