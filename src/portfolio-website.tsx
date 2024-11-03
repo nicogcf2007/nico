@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   Github,
   ExternalLink,
-  Menu,
-  X,
   Globe,
   Moon,
   Sun
 } from 'lucide-react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence  } from 'framer-motion';
 import translations, { LanguageTranslations } from './utils/translations';
 import socialLinks from './utils/contacts';
 import { useDarkMode } from './customHooks/useDarkMode';
@@ -25,12 +23,41 @@ interface ShootingStar {
 const Portfolio = () => {
   const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
   const [starId, setStarId] = useState(0);
+  const [stars, setStars] = useState(Array.from({ length: 50 }, () => createStar()));
   const [isDarkMode, setIsDarkMode] = useDarkMode();
   const [hasScrolled, setHasScrolled] = useState(false);
   const [language, setLanguage] = useState<keyof LanguageTranslations>(
     navigator.language.startsWith("es") ? "es" : "en"
   );
   const t = translations[language];
+
+  const clouds = [
+    { size: 'w-32 h-12', top: '10%', left: '15%', delay: 0, opacity: 0.6 },
+    { size: 'w-48 h-16', top: '20%', right: '25%', delay: 2, opacity: 0.7 },
+    { size: 'w-40 h-14', top: '35%', left: '45%', delay: 1, opacity: 0.5 },
+    { size: 'w-36 h-10', top: '15%', left: '65%', delay: 3, opacity: 0.4 },
+    { size: 'w-44 h-14', top: '45%', left: '25%', delay: 2, opacity: 0.6 },
+    { size: 'w-28 h-10', top: '25%', left: '85%', delay: 1, opacity: 0.5 },
+  ];
+
+  // Configuración de pájaros
+  const birds = [
+    { delay: 0, duration: 20, y: '15%' },
+    { delay: 5, duration: 25, y: '25%' },
+    { delay: 10, duration: 22, y: '35%' },
+  ];
+
+
+  // Función para crear una estrella con propiedades aleatorias
+  function createStar() {
+    return {
+      id: Math.random().toString(36).substr(2, 9), // Genera un ID único para cada estrella
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`
+    };
+  }
 
   useEffect(() => {
     const createShootingStar = () => {
@@ -85,129 +112,224 @@ const Portfolio = () => {
 
   return (
     <div className="relative min-h-screen text-zinc-100">
-      <div className={`fixed inset-0 overflow-hidden z-0 bg-gradient-to-b from-blue-50 to-white dark:bg-[#0a0426]`}>
-        {/* Gradiente base */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
-          className="absolute inset-0 bg-gradient-to-br from-blue-100 via-blue-50 to-white dark:from-[#0a0426] dark:via-[#1a0f3c] dark:to-[#2c1166]"
-        />
+      <div className="fixed inset-0 z-0 overflow-hidden">
+      {/* Gradiente base con transición suave */}
+      <motion.div
+        animate={{
+          background: isDarkMode
+            ? 'linear-gradient(to bottom right, #0a0426, #1a0f3c, #2c1166)'
+            : 'linear-gradient(to bottom right, rgb(219 234 254), rgb(243 244 246), white)'
+        }}
+        transition={{ duration: 0.5 }}
+        className="absolute inset-0"
+      />
 
-        {/* Nebulosas en modo oscuro / Nubes en modo claro */}
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.3, 0.2],
-            scale: [1, 1.1, 1],
-            rotate: [0, 360]
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear"
-          }}
-          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_25%_25%,_#e0f2fe_0%,_transparent_70%)] dark:bg-[radial-gradient(circle_at_25%_25%,_#9333ea_0%,_transparent_70%)]"
-        />
-
-        <motion.div
-          animate={{
-            opacity: [0.15, 0.25, 0.15],
-            scale: [1, 1.05, 1],
-            rotate: [360, 0]
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear"
-          }}
-          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_50%_60%,_#bfdbfe_0%,_transparent_65%)] dark:bg-[radial-gradient(circle_at_50%_60%,_#4f46e5_0%,_transparent_65%)]"
-        />
-
-        <motion.div
-          animate={{
-            opacity: [0.15, 0.25, 0.15],
-            scale: [1, 1.08, 1],
-            rotate: [0, -360]
-          }}
-          transition={{
-            duration: 35,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear"
-          }}
-          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_80%_80%,_#93c5fd_0%,_transparent_65%)] dark:bg-[radial-gradient(circle_at_80%_80%,_#6366f1_0%,_transparent_65%)]"
-        />
-
-        {/* Nubes decorativas (solo modo claro) */}
-        <motion.div
-          animate={{
-            x: [0, 10, 0],
-            y: [0, 5, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 dark:hidden"
-        >
-          <div className="absolute top-[10%] left-[15%] w-32 h-12 bg-white rounded-full opacity-60" />
-          <div className="absolute top-[20%] right-[25%] w-48 h-16 bg-white rounded-full opacity-70" />
-          <div className="absolute top-[35%] left-[45%] w-40 h-14 bg-white rounded-full opacity-50" />
-        </motion.div>
-
-        {/* Estrellas de fondo */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
+      {/* Elementos del modo claro */}
+      <AnimatePresence>
+        {!isDarkMode && (
+          <>
+            {/* Sol animado */}
             <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-200 rounded-full dark:bg-white"
               initial={{ opacity: 0 }}
-              animate={{
-                opacity: [0, 0.6, 0],
-              }}
-              transition={{
-                duration: Math.random() * 3 + 2,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-                delay: Math.random() * 2,
-              }}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-            />
-          ))}
-        </div>
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.8, 1, 0.8],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                }}
+                className="absolute top-[10%] right-[10%] w-24 h-24 rounded-full bg-gradient-to-r from-yellow-200 to-yellow-400 blur-sm"
+              />
+            </motion.div>
 
-        {/* Estrellas fugaces (solo modo oscuro) */}
-        <div className="hidden dark:block">
-          {shootingStars.map((star) => (
+            {/* Nubes animadas */}
+            {clouds.map((cloud, index) => (
+              <motion.div
+                key={`cloud-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <motion.div
+                  animate={{
+                    x: [-20, 20, -20],
+                    y: [-5, 5, -5],
+                  }}
+                  transition={{
+                    duration: 20 + cloud.delay,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: cloud.delay,
+                  }}
+                  className={`absolute ${cloud.size}`}
+                  style={{
+                    top: cloud.top,
+                    left: cloud.left,
+                    right: cloud.right,
+                  }}
+                >
+                  <div className={`w-full h-full bg-white rounded-full`} style={{ opacity: cloud.opacity }} />
+                </motion.div>
+              </motion.div>
+            ))}
+
+            {/* Pájaros */}
+            {birds.map((bird, index) => (
+              <motion.div
+                key={`bird-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <motion.div
+                  initial={{ x: -100 }}
+                  animate={{ x: "calc(100vw + 100px)" }}
+                  transition={{
+                    duration: bird.duration,
+                    repeat: Infinity,
+                    delay: bird.delay,
+                    ease: "linear",
+                  }}
+                  className="absolute"
+                  style={{ top: bird.y }}
+                >
+                  <motion.div
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                    }}
+                    className="w-3 h-1 bg-gray-600 rounded-full transform rotate-[30deg]"
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Elementos del modo oscuro */}
+      <AnimatePresence>
+        {isDarkMode && (
+          <>
+            {/* Nebulosas */}
             <motion.div
-              key={star.id}
-              className="absolute w-2 h-2 bg-white rounded-full"
-              initial={{
-                x: star.startX,
-                y: star.startY,
-                opacity: 0,
-              }}
-              animate={{
-                x: star.startX + (Math.cos(star.angle * Math.PI / 180) * 1000),
-                y: star.startY + (Math.sin(star.angle * Math.PI / 180) * 1000),
-                opacity: [0, 0.8, 0],
-              }}
-              transition={{
-                duration: 1.5 / star.speed,
-                ease: "easeInOut"
-              }}
-            />
-          ))}
-        </div>
-      </div>
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div
+                animate={{
+                  opacity: [0.2, 0.3, 0.2],
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 360]
+                }}
+                transition={{
+                  duration: 30,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "linear"
+                }}
+                className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_25%_25%,_#9333ea_0%,_transparent_70%)]"
+              />
+
+              <motion.div
+                animate={{
+                  opacity: [0.15, 0.25, 0.15],
+                  scale: [1, 1.05, 1],
+                  rotate: [360, 0]
+                }}
+                transition={{
+                  duration: 25,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "linear"
+                }}
+                className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_50%_60%,_#4f46e5_0%,_transparent_65%)]"
+              />
+
+              <motion.div
+                animate={{
+                  opacity: [0.15, 0.25, 0.15],
+                  scale: [1, 1.08, 1],
+                  rotate: [0, -360]
+                }}
+                transition={{
+                  duration: 35,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "linear"
+                }}
+                className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_80%_80%,_#6366f1_0%,_transparent_65%)]"
+              />
+            </motion.div>
+
+            {/* Estrellas */}
+            <div className="absolute inset-0">
+              {stars.map((star) => (
+                <motion.div
+                  key={star.id}
+                  className="absolute w-1 h-1 bg-white rounded-full"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: [0, 0.6, 0],
+                  }}
+                  transition={{
+                    duration: star.duration,
+                    delay: star.delay,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    left: star.left,
+                    top: star.top,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Estrellas fugaces */}
+            <div>
+              {shootingStars.map((star) => (
+                <motion.div
+                  key={star.id}
+                  className="absolute w-2 h-2 bg-white rounded-full"
+                  initial={{
+                    x: star.startX,
+                    y: star.startY,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    x: star.startX + (Math.cos(star.angle * Math.PI / 180) * 1000),
+                    y: star.startY + (Math.sin(star.angle * Math.PI / 180) * 1000),
+                    opacity: [0, 0.8, 0],
+                  }}
+                  transition={{
+                    duration: 1.5 / star.speed,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatDelay: Math.random() * 5
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
       <div className="fixed top-0 z-50 mt-2 -translate-x-1/2 left-1/2">
         <motion.nav
           initial={{ y: -100 }}
@@ -299,7 +421,7 @@ const Portfolio = () => {
             className="max-w-6xl px-4 py-20 mx-auto text-center"
           >
             <motion.h1
-              className="mb-6 text-5xl font-bold md:text-7xl"
+              className="mb-6 text-5xl font-bold md:text-7xl text-light-text-primary dark:text-dark-text-primary"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -540,7 +662,8 @@ const Portfolio = () => {
                 </motion.div>
                 <motion.button
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-[#2F81F7] to-[#238636] rounded-lg font-medium hover:opacity-90 transition-opacity"
+                  className="w-full py-3 font-medium transition-colors duration-200 rounded-lg hover:opacity-90 bg-light-secondary hover:bg-light-secondary-hover active:bg-light-secondary-active dark:bg-dark-secondary dark:hover:bg-dark-secondary-hover dark:active:bg-dark-secondary-active text-light-text-primary dark:text-dark-text-primary"
+                  // className="w-full py-3 font-medium text-white transition-colors duration-200 rounded-lg hover:opacity-90 bg-light-primary hover:bg-light-primary-hover active:bg-light-primary-active dark:bg-dark-primary dark:hover:bg-dark-primary-hover dark:active:bg-dark-primary-active "
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
