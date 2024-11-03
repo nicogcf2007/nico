@@ -1,21 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Github,
   ExternalLink,
   Menu,
   X,
-  Globe
+  Globe,
+  Moon,
+  Sun
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import translations, { LanguageTranslations } from './utils/translations';
 import socialLinks from './utils/contacts';
+import { useDarkMode } from './customHooks/useDarkMode';
+
+
+interface ShootingStar {
+  id: number;
+  startX: number;
+  startY: number;
+  angle: number;
+  speed: number;
+}
 
 const Portfolio = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
+  const [starId, setStarId] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useDarkMode();
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [language, setLanguage] = useState<keyof LanguageTranslations>(
     navigator.language.startsWith("es") ? "es" : "en"
   );
   const t = translations[language];
+
+  useEffect(() => {
+    const createShootingStar = () => {
+      const startX = Math.random() * window.innerWidth;
+      const startY = -20;
+      const angle = Math.random() * 30 + 30;
+      const speed = Math.random() * 2 + 1;
+      const id = starId;
+
+      setShootingStars(prev => [...prev, {
+        id,
+        startX,
+        startY,
+        angle,
+        speed
+      }]);
+
+      setStarId(prev => prev + 1);
+
+      setTimeout(() => {
+        setShootingStars(prev => prev.filter(star => star.id !== id));
+      }, 2000);
+    };
+
+    const interval = setInterval(createShootingStar, 3000);
+    return () => clearInterval(interval);
+  }, [starId]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Animation variants
   const fadeInUp = {
@@ -34,119 +85,212 @@ const Portfolio = () => {
 
   return (
     <div className="relative min-h-screen text-zinc-100">
-      <div className="fixed inset-0 bg-[#0d1117] overflow-hidden z-0">
+      <div className={`fixed inset-0 overflow-hidden z-0 bg-gradient-to-b from-blue-50 to-white dark:bg-[#0a0426]`}>
+        {/* Gradiente base */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#161b22] to-[#0d1117]"
+          transition={{ duration: 2 }}
+          className="absolute inset-0 bg-gradient-to-br from-blue-100 via-blue-50 to-white dark:from-[#0a0426] dark:via-[#1a0f3c] dark:to-[#2c1166]"
         />
+
+        {/* Nebulosas en modo oscuro / Nubes en modo claro */}
         <motion.div
           animate={{
             opacity: [0.2, 0.3, 0.2],
-            scale: [1, 1.1, 1]
+            scale: [1, 1.1, 1],
+            rotate: [0, 360]
           }}
           transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_0%_0%,_#238636_0%,_transparent_50%)]"
-        />
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.3, 0.2],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{
-            duration: 8,
+            duration: 30,
             repeat: Infinity,
             repeatType: "reverse",
-            delay: 4
+            ease: "linear"
           }}
-          className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_100%_100%,_#2F81F7_0%,_transparent_50%)]"
+          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_25%_25%,_#e0f2fe_0%,_transparent_70%)] dark:bg-[radial-gradient(circle_at_25%_25%,_#9333ea_0%,_transparent_70%)]"
         />
+
+        <motion.div
+          animate={{
+            opacity: [0.15, 0.25, 0.15],
+            scale: [1, 1.05, 1],
+            rotate: [360, 0]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear"
+          }}
+          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_50%_60%,_#bfdbfe_0%,_transparent_65%)] dark:bg-[radial-gradient(circle_at_50%_60%,_#4f46e5_0%,_transparent_65%)]"
+        />
+
+        <motion.div
+          animate={{
+            opacity: [0.15, 0.25, 0.15],
+            scale: [1, 1.08, 1],
+            rotate: [0, -360]
+          }}
+          transition={{
+            duration: 35,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear"
+          }}
+          className="absolute inset-0 mix-blend-screen opacity-20 bg-[radial-gradient(circle_at_80%_80%,_#93c5fd_0%,_transparent_65%)] dark:bg-[radial-gradient(circle_at_80%_80%,_#6366f1_0%,_transparent_65%)]"
+        />
+
+        {/* Nubes decorativas (solo modo claro) */}
+        <motion.div
+          animate={{
+            x: [0, 10, 0],
+            y: [0, 5, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 dark:hidden"
+        >
+          <div className="absolute top-[10%] left-[15%] w-32 h-12 bg-white rounded-full opacity-60" />
+          <div className="absolute top-[20%] right-[25%] w-48 h-16 bg-white rounded-full opacity-70" />
+          <div className="absolute top-[35%] left-[45%] w-40 h-14 bg-white rounded-full opacity-50" />
+        </motion.div>
+
+        {/* Estrellas de fondo */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-200 rounded-full dark:bg-white"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 0.6, 0],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                delay: Math.random() * 2,
+              }}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Estrellas fugaces (solo modo oscuro) */}
+        <div className="hidden dark:block">
+          {shootingStars.map((star) => (
+            <motion.div
+              key={star.id}
+              className="absolute w-2 h-2 bg-white rounded-full"
+              initial={{
+                x: star.startX,
+                y: star.startY,
+                opacity: 0,
+              }}
+              animate={{
+                x: star.startX + (Math.cos(star.angle * Math.PI / 180) * 1000),
+                y: star.startY + (Math.sin(star.angle * Math.PI / 180) * 1000),
+                opacity: [0, 0.8, 0],
+              }}
+              transition={{
+                duration: 1.5 / star.speed,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </div>
       </div>
-
-      <div className="relative z-10">
-        <nav className="fixed w-full bg-[#0d1117]/80 backdrop-blur-sm z-50 border-b border-zinc-800">
-          <div className="max-w-6xl px-4 py-4 mx-auto">
-            <div className="flex items-center justify-between">
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-xl font-bold bg-gradient-to-r from-[#2F81F7] to-[#238636] bg-clip-text text-transparent"
-              >
-                NRDev
-              </motion.span>
-
-              <div className="items-center hidden space-x-8 md:flex">
-                <motion.div
-                  variants={staggerContainer}
-                  initial="initial"
-                  animate="animate"
-                  className="flex space-x-8"
-                >
-                  {[
-                    ['#home', t.nav.home],
-                    ['#projects', t.nav.projects],
-                    ['#about', t.nav.about],
-                    ['#contact', t.nav.contact]
-                  ].map(([href, text]) => (
-                    <motion.a
-                      key={href}
-                      href={href}
-                      variants={fadeInUp}
-                      className="hover:text-[#2F81F7] transition-colors relative group"
+      <div className="fixed top-0 z-50 mt-2 -translate-x-1/2 left-1/2">
+        <motion.nav
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="rounded-full"
+        >
+          <motion.div
+            className="rounded-full bg-white/15 dark:bg-gray-800/50 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: hasScrolled ? 1 : 0,
+              transition: { duration: 0.4 }
+            }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: -1
+            }}
+          />
+          <div className="px-1">
+            <div className="flex items-center justify-center h-9">
+              <div className="w-full">
+                <div className="flex flex-wrap items-center justify-center space-x-1 text-sm font-bold text-zinc-100">
+                  <motion.a
+                    href="#proyectos"
+                    className="px-3 py-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Proyectos
+                  </motion.a>
+                  <motion.a
+                    href="#educacion"
+                    className="px-3 py-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Educación
+                  </motion.a>
+                  <motion.a
+                    href="#sobre-mi"
+                    className="px-3 py-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Sobre mí
+                  </motion.a>
+                  <motion.a
+                    href="#contacto"
+                    className="px-3 py-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Contacto
+                  </motion.a>
+                  <div className="flex items-center pl-1">
+                    <motion.button
+                      onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
+                      className="p-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      {text}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#2F81F7] transition-all group-hover:w-full" />
-                    </motion.a>
-                  ))}
-                </motion.div>
-
-                <button
-                  onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-                  className="flex items-center space-x-1 hover:text-[#2F81F7] transition-colors"
-                >
-                  <Globe size={20} />
-                  <span className="text-sm uppercase">{language}</span>
-                </button>
+                      <Globe size={16} />
+                    </motion.button>
+                    <motion.button
+                      onClick={() => setIsDarkMode(!isDarkMode)}
+                      className="p-1.5 transition-all rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/80"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+                    </motion.button>
+                  </div>
+                </div>
               </div>
-
-              <button
-                className="md:hidden"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? <X /> : <Menu />}
-              </button>
             </div>
           </div>
-
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="md:hidden absolute w-full bg-[#0d1117] border-b border-zinc-800 py-4"
-            >
-              <div className="flex flex-col px-4 space-y-4">
-                <a href="#inicio" className="hover:text-[#2F81F7] transition-colors">{t.nav.home}</a>
-                <a href="#proyectos" className="hover:text-[#2F81F7] transition-colors">{t.nav.projects}</a>
-                <a href="#sobre-mi" className="hover:text-[#2F81F7] transition-colors">{t.nav.about}</a>
-                <a href="#contacto" className="hover:text-[#2F81F7] transition-colors">{t.nav.contact}</a>
-                <button
-                  onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-                  className="flex items-center space-x-1 hover:text-[#2F81F7] transition-colors"
-                >
-                  <Globe size={20} />
-                  <span className="text-sm uppercase">{language}</span>
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </nav>
-
+        </motion.nav>
+      </div>
+      <div className="relative z-10">
         <section id="inicio" className="flex items-center justify-center min-h-screen pt-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -266,76 +410,145 @@ const Portfolio = () => {
             </motion.div>
           </motion.div>
         </section>
+        {/* Sobre Mi */}
         <section id="sobre-mi" className="py-20">
-          <div className="max-w-4xl px-4 mx-auto">
-            <h2 className="mb-12 text-3xl font-bold text-center md:text-4xl">{t.about.title}</h2>
-            <div className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg p-8">
-              <p className="mb-6 text-zinc-300">{t.about.description}</p>
-              <div className="grid gap-8 md:grid-cols-2">
-                <div>
+          <motion.div
+            className="max-w-4xl px-4 mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h2
+              className="mb-12 text-3xl font-bold text-center md:text-4xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              {t.about.title}
+            </motion.h2>
+            <motion.div
+              className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg p-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.p
+                className="mb-6 text-zinc-300"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
+                {t.about.description}
+              </motion.p>
+              <motion.div
+                className="grid gap-8 md:grid-cols-2"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                <motion.div variants={fadeInUp}>
                   <h3 className="mb-4 text-xl font-bold">{t.about.skills}</h3>
                   <div className="flex flex-wrap gap-2">
                     {['React', 'Node.js', 'TypeScript', 'Python', 'SQL', 'AWS'].map((skill) => (
-                      <span
+                      <motion.span
                         key={skill}
                         className="px-3 py-1 bg-[#0d1117] border border-zinc-800 rounded-full text-sm"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
                       >
                         {skill}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
-                </div>
-                <div>
+                </motion.div>
+                <motion.div variants={fadeInUp}>
                   <h3 className="mb-4 text-xl font-bold">{ }</h3>
                   <ul className="space-y-2 text-zinc-300">
-                    {
-                      t.about.roles.map(rol => (
-                        <li>• {rol}</li>
-                      ))
-                    }
+                    {t.about.roles.map((rol, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        • {rol}
+                      </motion.li>
+                    ))}
                   </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* Contacto */}
         <section id="contacto" className="py-20">
-          <div className="max-w-4xl px-4 mx-auto">
-            <h2 className="mb-12 text-3xl font-bold text-center md:text-4xl">{t.contact.title}</h2>
-            <div className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg p-8">
-              <form className="space-y-6">
-                <div>
+          <motion.div
+            className="max-w-4xl px-4 mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h2
+              className="mb-12 text-3xl font-bold text-center md:text-4xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              {t.contact.title}
+            </motion.h2>
+            <motion.div
+              className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg p-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.form
+                className="space-y-6"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                <motion.div variants={fadeInUp}>
                   <label className="block mb-2 text-sm font-medium">{t.contact.name}</label>
                   <input
                     type="text"
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   />
-                </div>
-                <div>
+                </motion.div>
+                <motion.div variants={fadeInUp}>
                   <label className="block mb-2 text-sm font-medium">{t.contact.email}</label>
                   <input
                     type="email"
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   />
-                </div>
-                <div>
+                </motion.div>
+                <motion.div variants={fadeInUp}>
                   <label className="block mb-2 text-sm font-medium">{t.contact.message}</label>
                   <textarea
                     rows={4}
                     className="w-full p-3 bg-[#0d1117] rounded-lg border border-zinc-800 focus:border-[#2F81F7] focus:outline-none"
                   ></textarea>
-                </div>
-                <button
+                </motion.div>
+                <motion.button
                   type="submit"
                   className="w-full py-3 bg-gradient-to-r from-[#2F81F7] to-[#238636] rounded-lg font-medium hover:opacity-90 transition-opacity"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {t.contact.send}
-                </button>
-              </form>
-            </div>
-          </div>
+                </motion.button>
+              </motion.form>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* Footer */}
@@ -345,7 +558,7 @@ const Portfolio = () => {
           </div>
         </footer>
       </div>
-    </div>
+    </div >
   )
 }
 
