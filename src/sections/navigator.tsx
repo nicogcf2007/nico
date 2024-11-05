@@ -46,60 +46,53 @@ const Navigator: React.FC<NavigatorProps> = ({ t, language, setLanguage }) => {
             zIndex: -1
           }}
         />
-        <div className="px-1">
-          <div className="flex items-center justify-center min-w-0 h-9">
-            <div className="flex items-center justify-center min-w-0 space-x-1 text-sm font-bold text-light-text-secondary dark:text-dark-text-secondary">
-              <motion.a
-                href="#proyectos"
-                className="px-2 py-1.5 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary whitespace-nowrap"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t.nav.projects}
-              </motion.a>
-              <motion.a
-                href="#habilidades"
-                className="px-1 py-1.5 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary whitespace-nowrap"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t.nav.skills}
-              </motion.a>
-              <motion.a
-                href="#sobre-mi"
-                className="px-1 py-1.5 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary whitespace-nowrap"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t.nav.about}
-              </motion.a>
-              <motion.a
-                href="#contacto"
-                className="px-1 py-1.5 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary whitespace-nowrap"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t.nav.contact}
-              </motion.a>
-              <div className="flex items-center min-w-0 pl-1">
-                <motion.button
-                  onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
-                  className="p-1 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Globe size={16} />
-                </motion.button>
-                <motion.button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="p-1.5 transition-all rounded-full hover:bg-light-background-primary dark:hover:bg-dark-background-primary"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-                </motion.button>
-              </div>
-            </div>
+        <div className="px-1 flex items-center space-x-4">
+          <div className="flex items-center justify-center min-w-0 h-9 space-x-3">
+            {/* Enlaces de navegación */}
+            <motion.a
+              href="#projects"
+              className="px-2 py-2 transition-all rounded-full text-light-text-primary dark:text-dark-text-primary hover:bg-light-primary-hover dark:hover:bg-dark-primary-hover hover:text-light-link-hover dark:hover:text-dark-link-hover whitespace-nowrap"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t.nav.projects}
+            </motion.a>
+            <motion.a
+              href="#about"
+              className="px-2 py-2 transition-all rounded-full text-light-text-secondary dark:text-dark-text-primary hover:bg-light-primary-hover dark:hover:bg-dark-primary-hover hover:text-light-link-hover dark:hover:text-dark-link-hover whitespace-nowrap"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t.nav.about}
+            </motion.a>
+            <motion.a
+              href="#contact"
+              className="px-2 py-2 transition-all rounded-full text-light-text-secondary dark:text-dark-text-primary hover:bg-light-primary-hover dark:hover:bg-dark-primary-hover hover:text-light-link-hover dark:hover:text-dark-link-hover whitespace-nowrap"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {t.nav.contact}
+            </motion.a>
+          </div>
+          <div className="flex items-center space-x-1 pl-3 border-l border-light-border dark:border-dark-border">
+            {/* Cambiar idioma */}
+            <motion.button
+              onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
+              className="p-1 transition-all rounded-full hover:bg-light-primary-hover dark:hover:bg-dark-primary-hover hover:text-light-link-hover dark:hover:text-dark-link-hover"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Globe size={18} />
+            </motion.button>
+            {/* Cambiar modo oscuro */}
+            <motion.button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-1 transition-all rounded-full hover:bg-light-primary-hover dark:hover:bg-dark-primary-hover hover:text-light-link-hover dark:hover:text-dark-link-hover"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </motion.button>
           </div>
         </div>
       </motion.nav>

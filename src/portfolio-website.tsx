@@ -89,7 +89,7 @@ const Portfolio = () => {
           </motion.div>
         </section>
 
-        <section id="proyectos" className="py-20">
+        <section id="projects" className="py-20">
           <motion.div
             className="max-w-6xl px-4 mx-auto"
             initial={{ opacity: 0 }}
@@ -113,7 +113,7 @@ const Portfolio = () => {
               viewport={{ once: true }}
             >
               {[1, 2, 3, 4].map((project) => (
-                <motion.div
+                <motion.article
                   key={project}
                   variants={fadeInUp}
                   className="bg-[#161b22]/50 backdrop-blur-sm border border-zinc-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-transform duration-300"
@@ -149,13 +149,13 @@ const Portfolio = () => {
                       </a>
                     </div>
                   </div>
-                </motion.div>
+                </motion.article>
               ))}
             </motion.div>
           </motion.div>
         </section>
         {/* Sobre Mi */}
-        <section id="sobre-mi" className="py-20">
+        <section id="about" className="py-20">
           <motion.div
             className="max-w-4xl px-4 mx-auto"
             initial={{ opacity: 0 }}
@@ -231,7 +231,7 @@ const Portfolio = () => {
         </section>
 
         {/* Contacto */}
-        <section id="contacto" className="py-20">
+        <section id="contact" className="py-20">
           <motion.div
             className="max-w-4xl px-4 mx-auto"
             initial={{ opacity: 0 }}
