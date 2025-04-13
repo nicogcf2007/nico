@@ -12,9 +12,9 @@ module.exports = {
         // Colores personalizados para el modo claro
         light: {
           primary: {
-            DEFAULT: colors.blue[500],
-            hover: colors.blue[600],
-            active: colors.blue[700],
+            DEFAULT: colors.yellow[500],
+            hover: colors.yellow[600],
+            active: colors.yellow[700],
           },
           secondary: {
             DEFAULT: colors.gray[100],
@@ -28,7 +28,7 @@ module.exports = {
           },
           background: {
             primary: colors.white,
-            secondary: colors.blue[50],
+            secondary: colors.yellow[50],
             tertiary: colors.gray[100],
           },
           border: {
@@ -36,8 +36,8 @@ module.exports = {
             hover: colors.gray[300],
           },
           link: {
-            DEFAULT: colors.blue[600],
-            hover: colors.blue[700],
+            DEFAULT: colors.yellow[600],
+            hover: colors.yellow[800],
           },
         },
         // Colores personalizados para el modo oscuro

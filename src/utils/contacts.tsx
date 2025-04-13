@@ -5,8 +5,8 @@ import {
 } from 'lucide-react';
 
 const socialLinks: [string, JSX.Element][] = [
-    ['https://github.com', <Github size={24} />],
-    ['https://linkedin.com', <Linkedin size={24} />],
+    ['https://github.com/nicogcf2007', <Github size={24} />],
+    ['https://www.linkedin.com/in/nicogcf2007/', <Linkedin size={24} />],
     ['mailto:nicogcf2007@gmail.com', <Mail size={24} />]
   ];
 
