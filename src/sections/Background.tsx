@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDarkMode } from '../Contexts/darkModeContext';
+import { useDarkMode } from '../contexts/darkModeContext';
 
 interface ShootingStar {
     id: number;

@@ -32,8 +32,8 @@ module.exports = {
             tertiary: colors.gray[100],
           },
           border: {
-            DEFAULT: colors.gray[200],
-            hover: colors.gray[300],
+            DEFAULT: colors.gray[400],
+            hover: colors.gray[500],
           },
           link: {
             DEFAULT: colors.yellow[600],
@@ -64,7 +64,7 @@ module.exports = {
           },
           border: {
             DEFAULT: colors.gray[700],
-            hover: colors.gray[600],
+            hover: colors.gray[500],
           },
           link: {
             DEFAULT: colors.indigo[400],

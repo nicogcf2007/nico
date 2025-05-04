@@ -1,10 +1,8 @@
-// --- START OF FILE translations.ts ---
-
 export interface ExperienceDetail {
-  id: string; // Unique identifier for React keys
+  id: string;
   title: string;
-  company: string; // Keep company separate for potential styling
-  duration?: string; // Optional duration
+  company: string;
+  duration?: string;
   summary: string;
   details: readonly string[];
   skills: readonly string[];
@@ -34,18 +32,16 @@ export interface Translations {
     title: string;
     description: string;
     skills: string;
-    experience: string; // Keep for compatibility? Maybe remove if unused.
     experienceTitle: string;
-    // roles: readonly string[]; // REMOVED - Replaced by experienceDetails
     skillCategories: {
-      frontend: string;
+      webFrontend: string;
+      appDevelopment: string; // Renombrada desde mobileDevelopment
       backend: string;
       databases: string;
-      devops: string;
+      devopsPlatforms: string;
       softSkills: string;
     };
     softSkillsList: readonly string[];
-    // NEW: Structured experience details
     experienceDetails: readonly ExperienceDetail[];
   };
   contact: {
@@ -54,6 +50,9 @@ export interface Translations {
     email: string;
     message: string;
     send: string;
+    namePlaceholder?: string;
+    emailPlaceholder?: string;
+    messagePlaceholder?: string;
   };
   footer: {
     rights: string;
@@ -70,7 +69,7 @@ const translations: LanguageTranslations = {
     nav: {
       projects: "Projects",
       skills: "Skills",
-      about: "About",
+      about: "About Me",
       contact: "Contact"
     },
     hero: {
@@ -90,7 +89,6 @@ const translations: LanguageTranslations = {
       title: "About Me",
       description: "I'm a developer passionate about creating unique and functional digital experiences. With experience in full stack web development, I specialize in building robust and scalable applications.",
       skills: "My Skills",
-      experience: "Experience",
       experienceTitle: "Experience Highlights",
       experienceDetails: [
         {
@@ -131,17 +129,17 @@ const translations: LanguageTranslations = {
             "Developed applications for advanced PDF modification, including data extraction, merging, and form filling.",
             "Managed client communication, requirements gathering, and project delivery independently."
           ],
-          skills: ["Python", "JavaScript", "Node.js", "PDF manipulation libraries", "Web Scraping", "API Integration", "Client Communication"]
+          skills: ["Python", "TypeScript", "Node.js", "WordPress", "Web Scraping", "API Integration", "n8n", "Client Communication"]
         }
       ],
       skillCategories: {
-        frontend: "Frontend",
+        webFrontend: "Web Frontend",
+        appDevelopment: "Applications Development",
         backend: "Backend",
-        databases: "Databases",
-        devops: "DevOps & Tools",
-        softSkills: "Soft Skills" // Title for the category card
+        databases: "Databases & BaaS",
+        devopsPlatforms: "DevOps & Platforms",
+        softSkills: "Soft Skills"
       },
-      // NEW: English soft skills list
       softSkillsList: [
         "Teamwork",
         "Assertive Communication",
@@ -155,7 +153,10 @@ const translations: LanguageTranslations = {
       name: "Name",
       email: "Email",
       message: "Message",
-      send: "Send Message"
+      send: "Send Message",
+      namePlaceholder: "Your Name",
+      emailPlaceholder: "your@email.com",
+      messagePlaceholder: "Your message..."
     },
     footer: {
       rights: "All rights reserved."
@@ -185,7 +186,6 @@ const translations: LanguageTranslations = {
       title: "Sobre Mí",
       description: "Soy un desarrollador apasionado por crear experiencias digitales únicas y funcionales. Con experiencia en desarrollo web full stack, me especializo en construir aplicaciones robustas y escalables.",
       skills: "Mis Habilidades",
-      experience: "Experiencia",
       experienceTitle: "Experiencia Destacada",
       experienceDetails: [
         {
@@ -226,17 +226,17 @@ const translations: LanguageTranslations = {
             "Desarrollé programas para la modificación avanzada de PDFs, incluyendo extracción de datos, fusión y llenado de formularios.",
             "Gestioné la comunicación con clientes, la recopilación de requisitos y la entrega de proyectos de forma independiente."
           ],
-          skills: ["Python", "JavaScript", "Node.js", "Librerías de manipulación de PDF", "Web Scraping", "Integración de API", "Comunicación con Clientes"]
+          skills: ["Python", "TypeScript", "Node.js", "WordPress", "Web Scraping", "Integración de API", "n8n", "Comunicación con Clientes"]
         }
       ],
       skillCategories: {
-        frontend: "Frontend",
-        backend: "Backend",
-        databases: "Bases de Datos",
-        devops: "DevOps y Herramientas",
-        softSkills: "Habilidades Blandas" // Title for the category card
+         webFrontend: "Frontend Web",
+         appDevelopment: "Desarrollo de Aplicaciones",
+         backend: "Backend",
+         databases: "Bases de Datos y BaaS",
+         devopsPlatforms: "DevOps y Plataformas",
+         softSkills: "Habilidades Blandas"
       },
-      // NEW: Spanish soft skills list
       softSkillsList: [
         "Trabajo en equipo",
         "Comunicación Asertiva",
@@ -250,7 +250,10 @@ const translations: LanguageTranslations = {
       name: "Nombre",
       email: "Email",
       message: "Mensaje",
-      send: "Enviar Mensaje"
+      send: "Enviar Mensaje",
+      namePlaceholder: "Tu Nombre",
+      emailPlaceholder: "tu@email.com",
+      messagePlaceholder: "Tu mensaje..."
     },
     footer: {
       rights: "Todos los derechos reservados."
@@ -259,4 +262,3 @@ const translations: LanguageTranslations = {
 } as const;
 
 export default translations;
-// --- END OF FILE translations.ts ---

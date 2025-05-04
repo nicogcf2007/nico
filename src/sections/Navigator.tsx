@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { LanguageTranslations, Translations } from '../utils/translations';
 import { Globe, Moon, Sun } from 'lucide-react';
-import { useDarkMode } from '../Contexts/darkModeContext';
+import { useDarkMode } from '../contexts/darkModeContext';
 
 type NavigatorProps = {
   t: Translations;
