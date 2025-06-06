@@ -1,0 +1,31 @@
+/**
+ * Utilidad para manejar rutas de imágenes en Next.js con basePath
+ */
+
+/**
+ * Obtiene la ruta correcta para una imagen considerando el basePath de Next.js
+ */
+export const getImagePath = (imagePath: string): string => {
+  // Si ya es una URL completa, data URL o protocolo relativo, no modificar
+  if (imagePath.startsWith('http') || imagePath.startsWith('data:') || imagePath.startsWith('//')) {
+    return imagePath;
+  }
+  
+  // En desarrollo, usar la ruta directa
+  if (process.env.NODE_ENV === 'development') {
+    return imagePath;
+  }
+  
+  // En producción, aplicar el basePath
+  const basePath = '/NRDev';
+  return `${basePath}${imagePath}`;
+};
+
+/**
+ * Lista de imágenes del proyecto para verificación
+ */
+export const PROJECT_IMAGES = {
+  logo: '/images/logo2.png',
+  logoAlt: '/images/logo.png',
+  // Agregar más imágenes según sea necesario
+} as const; 
