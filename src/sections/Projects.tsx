@@ -106,16 +106,16 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="projects" className="py-20" style={{ opacity: 0 }}>
+    <section ref={sectionRef} id="projects" className="py-20">
       <div className="px-4 mx-auto max-w-6xl">
-        <h2 ref={titleRef} className="mb-12 text-3xl font-bold text-center md:text-4xl text-gray-100" style={{ opacity: 0 }}>
+        <h2 ref={titleRef} className="mb-12 text-3xl font-bold text-center md:text-4xl text-text-primary" style={{ opacity: 0 }}>
           {t.projects.title}
         </h2>
         <div ref={gridRef} className="grid gap-6 sm:gap-8 md:grid-cols-2">
           {projects.map((project) => (
             <article
               key={project.id}
-              className="gsap-project-card overflow-hidden rounded-lg border shadow-md transition-all duration-300 bg-gray-800/35 border-gray-600/60 hover:border-gray-500/80 hover:shadow-lg hover:-translate-y-1"
+              className="gsap-project-card overflow-hidden rounded-lg border shadow-md transition-all duration-300 bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg hover:-translate-y-1"
               style={{ opacity: 0 }}
             >
               <OptimizedImage
@@ -123,22 +123,22 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
                 alt={project.title}
                 className="aspect-video cursor-pointer"
                 onClick={() => openImagePopup(project.image)}
-                title="Click para ampliar imagen"
+                title={t.projects.clickToEnlarge}
                 priority={false}
                 quality={80}
               />
               <div className="p-6">
-                <h3 className="mb-2 text-xl font-bold text-gray-100">
+                <h3 className="mb-2 text-xl font-bold text-text-primary">
                    {project.title}
                 </h3>
-                <p className="mb-4 text-gray-300">
+                <p className="mb-4 text-text-secondary">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech) => (
                     <span
                        key={tech}
-                       className="px-3 py-1 text-xs rounded-full border transition-colors duration-200 cursor-default bg-gray-700 text-gray-200 border-gray-600/50 hover:bg-gray-600"
+                       className="px-3 py-1 text-xs rounded-full border transition-colors duration-200 cursor-default bg-surface text-text-secondary border-border/50 hover:bg-border"
                     >
                       {tech}
                     </span>
@@ -150,7 +150,7 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center transition-colors text-indigo-400 hover:text-indigo-300"
+                      className="inline-flex items-center transition-colors text-accent-light hover:text-text-primary"
                     >
                       {t.projects.demo} <ExternalLink size={16} className="ml-1" />
                     </a>
@@ -161,7 +161,7 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
                         setCurrentVideoUrl(project.videoUrl!);
                         setVideoPopupOpen(true);
                       }}
-                       className="inline-flex items-center transition-colors text-indigo-400 hover:text-indigo-300"
+                       className="inline-flex items-center transition-colors text-accent-light hover:text-text-primary"
                     >
                       {t.projects.video} <Video size={16} className="mt-1 ml-1" />
                     </button>
@@ -171,14 +171,14 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
                       href={project.codeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center transition-colors text-indigo-400 hover:text-indigo-300"
+                      className="inline-flex items-center transition-colors text-accent-light hover:text-text-primary"
                     >
                       {t.projects.code} <Github size={16} className="ml-1" />
                     </a>
                   ) : (
                     <button
                       onClick={() => setCodeNotAvailablePopupOpen(true)}
-                      className="inline-flex items-center transition-colors text-indigo-400 hover:text-indigo-300"
+                      className="inline-flex items-center transition-colors text-accent-light hover:text-text-primary"
                     >
                       {t.projects.code} <Github size={16} className="ml-1" />
                     </button>
@@ -204,7 +204,7 @@ const Projects: React.FC<ProjectsProps> = ({ t, language }) => {
           isOpen={imagePopupOpen}
           onClose={() => setImagePopupOpen(false)}
           imageUrl={currentImageUrl}
-          altText="Vista previa del proyecto"
+          t={t}
         />
       </div>
     </section>

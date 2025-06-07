@@ -21,7 +21,7 @@ const socialLinks: [string, JSX.Element, string][] = [
     'hover:text-[#0A66C2]'
   ],
   [
-    'mailto:nicogcf2007@gmail.com',
+    'mailto:nr7dev@gmail.com',
     <Mail size={24} />,
     'hover:text-red-600'
   ],

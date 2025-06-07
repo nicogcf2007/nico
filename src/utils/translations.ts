@@ -1,11 +1,8 @@
 export interface ExperienceDetail {
-  id: string;
-  title: string;
+  role: string;
   company: string;
-  duration?: string;
-  summary: string;
-  details: readonly string[];
-  skills: readonly string[];
+  date: string;
+  responsibilities: readonly string[];
 }
 
 export interface Translations {
@@ -14,10 +11,17 @@ export interface Translations {
     skills: string;
     about: string;
     contact: string;
+    resume: string;
+    switchToEnglish: string;
+    switchToSpanish: string;
   };
   hero: {
     title: string;
     role: string;
+    viewProjects: string;
+    downloadCV: string;
+    contactMe: string;
+    scrollDown: string;
   };
   projects: {
     title: string;
@@ -27,11 +31,14 @@ export interface Translations {
     codeNotAvailable: string;
     error: string;
     closeButton: string;
+    imagePreview: string;
+    clickToEnlarge: string;
+    videoNotSupported: string;
   };
   about: {
     title: string;
     description: string;
-    skills: string;
+    skillsTitle: string;
     experienceTitle: string;
     skillCategories: {
       webFrontend: string;
@@ -53,9 +60,25 @@ export interface Translations {
     namePlaceholder?: string;
     emailPlaceholder?: string;
     messagePlaceholder?: string;
+    description: string;
+    whatsappMessage: string;
+    whatsappButton: string;
+    emailDescription: string;
   };
   footer: {
     rights: string;
+    madeWith: {
+      text1: string;
+      text2: string;
+      text3: string;
+    };
+    builtWith: string;
+    technologies: string;
+    author: string;
+    backToTop: string;
+  };
+  common: {
+    backToTop: string;
   };
 }
 
@@ -70,11 +93,18 @@ const translations: LanguageTranslations = {
       projects: "Projects",
       skills: "Skills",
       about: "About Me",
-      contact: "Contact"
+      contact: "Contact",
+      resume: "Resume",
+      switchToEnglish: "Switch to English",
+      switchToSpanish: "Cambiar a Español"
     },
     hero: {
       title: "Hello, I'm",
-      role: "Full Stack Developer"
+      role: "Full Stack Developer",
+      viewProjects: "View Projects",
+      downloadCV: "Download CV",
+      contactMe: "Contact Me",
+      scrollDown: "Start scrolling"
     },
     projects: {
       title: "Featured Projects",
@@ -83,53 +113,47 @@ const translations: LanguageTranslations = {
       video: "Video",
       codeNotAvailable: "Code Not Available",
       error: "This project is private or is under a confidentiality agreement.",
-      closeButton: "Close"
+      closeButton: "Close",
+      imagePreview: "Project Preview",
+      clickToEnlarge: "Click to enlarge image",
+      videoNotSupported: "Your browser does not support the video tag."
     },
     about: {
       title: "About Me",
       description: "I'm a developer passionate about creating unique and functional digital experiences. With experience in full stack web development, I specialize in building robust and scalable applications.",
-      skills: "My Skills",
-      experienceTitle: "Experience Highlights",
+      skillsTitle: "My Skills",
+      experienceTitle: "Professional Experience",
       experienceDetails: [
         {
-          id: "cnc",
-          title: "Professional Internship",
+          role: "Professional Internship",
           company: "Centro Nacional de Consultoría (CNC)",
-          summary: "Completed a one-year professional internship, integrating into a multidisciplinary team of about 7 people. This experience was fundamental to consolidating my technical knowledge and applying it to real projects, while strengthening my collaboration and cross-functional communication skills.",
-          details: [
-            "Application Maintenance: Actively collaborated in the corrective and evolutionary maintenance of various existing web applications. This involved working with technologies like React.js, PHP, Python (Django, FastAPI), and PostgreSQL, interacting not only with other developers but also with designers and managers to understand requirements and deliver solutions. On several projects, up to 3 developers worked simultaneously on specific tasks, requiring effective coordination and constant communication within the larger team.",
-            "Web Application Development: Participated in the development cycle of new web applications, from feature implementation to testing support. Had the opportunity to apply modern technologies and collaborate with different roles to bring ideas to life:",
-            "Frontend: Contributed to interface development with React.js and Next.js, using Tailwind CSS and working from provided designs.",
-            "Backend: Collaborated in creating APIs using FastAPI (Python) and Node.js, ensuring they met defined functional needs.",
-            "Cloud: Became familiar with basic concepts of application deployment and management on AWS, supporting the team's tasks in this area.",
-            "This internship allowed me not only to apply my technical skills in a professional environment but also to significantly develop my soft skills, such as teamwork, assertive communication with different roles (development, design, management), and joint problem-solving in a highly collaborative and multidisciplinary setting."
-          ],
-          skills: ["Tailwind CSS", "WebSockets", "AWS", "PHP", "Node.js", "Django REST framework", "Next.js", "TypeScript", "Python", "Git", "FastAPI", "PostgreSQL", "React.js"]
+          date: "Jan 2023 - Jan 2024",
+          responsibilities: [
+            "Contributed to the maintenance and development of web applications using React.js, PHP, and Python (Django, FastAPI).",
+            "Worked in a multidisciplinary team, collaborating with designers and managers to deliver effective solutions.",
+            "Participated in the full development cycle, from feature implementation to testing support.",
+            "Gained experience with AWS for application deployment and management."
+          ]
         },
         {
-          id: "colcambios",
-          title: "Full Stack Developer",
+          role: "Full Stack Developer",
           company: "ColCambios",
-          summary: "Working closely with another developer, I actively participated in the technological evolution of the company's currency exchange platform, acquiring and applying new technologies on the fly.",
-          details: [
-            "Initial Web Maintenance and Update: Collaborated on functional improvements, bug fixes, and updates to the existing website (HTML, CSS, JavaScript, PHP) to ensure its proper functioning.",
-            "Comprehensive Modernization (Web Remodel): Significantly contributed, as part of a two-person team, to rebuilding the web platform. Participated in frontend component development using React.js, representing intensive practical learning and resulting in a noticeable improvement in the user interface. Collaborated on implementing backend services with Node.js and Express.js, handling business logic and connection to the MySQL database.",
-            "Administrative Mobile Application Development: Participated alongside my colleague in developing an internal cross-platform mobile application using React Native. Through this project, I applied my mobile development knowledge to create a tool that allowed the administrative team to manage key operations more efficiently, connecting to an Express.js backend.",
-            "This role was a key opportunity to learn and apply modern technologies like React.js, Node.js, and React Native in a real production environment, always working collaboratively."
-          ],
-          skills: ["MySQL", "WebSockets", "Express.js", "PHP", "Node.js", "TypeScript", "Assertive Communication", "Git", "Teamwork", "React Native", "React.js"]
+          date: "Jun 2022 - Dec 2022",
+          responsibilities: [
+            "Modernized the company's currency exchange platform, migrating from a legacy system to a React.js and Node.js stack.",
+            "Developed a cross-platform mobile application with React Native for internal administrative management.",
+            "Handled both frontend (React.js) and backend (Node.js, Express.js) tasks in a two-person team."
+          ]
         },
         {
-          id: "freelance",
-          title: "Freelance Developer",
+          role: "Freelance Developer",
           company: "Independent Projects",
-          summary: "Developed various custom software solutions for clients, focusing on automation and document processing.",
-          details: [
-            "Created automation bots to streamline repetitive tasks and improve efficiency for clients.",
-            "Developed applications for advanced PDF modification, including data extraction, merging, and form filling.",
-            "Managed client communication, requirements gathering, and project delivery independently."
-          ],
-          skills: ["Python", "TypeScript", "Node.js", "WordPress", "Web Scraping", "API Integration", "n8n", "Client Communication"]
+          date: "2021 - Present",
+          responsibilities: [
+            "Created automation bots and scripts to streamline repetitive tasks for various clients.",
+            "Developed custom applications for advanced PDF manipulation and data extraction.",
+            "Managed client communication, requirement gathering, and project delivery from start to finish."
+          ]
         }
       ],
       skillCategories: {
@@ -156,10 +180,26 @@ const translations: LanguageTranslations = {
       send: "Send Message",
       namePlaceholder: "Your Name",
       emailPlaceholder: "your@email.com",
-      messagePlaceholder: "Your message..."
+      messagePlaceholder: "Your message...",
+      description: "Have a project in mind? Let's talk!",
+      whatsappMessage: "Hello! I'm interested in contacting you for a project.",
+      whatsappButton: "Contact via WhatsApp",
+      emailDescription: "Or write me directly at:"
     },
     footer: {
-      rights: "All rights reserved."
+      rights: "All rights reserved.",
+      madeWith: {
+        text1: "Made with",
+        text2: "by",
+        text3: "and"
+      },
+      builtWith: "Built with",
+      technologies: "Next.js, TypeScript, Three.js, Tailwind CSS, Lenis & GSAP",
+      author: "Nicolas Rivera",
+      backToTop: "Back to Top"
+    },
+    common: {
+      backToTop: "Back to Top"
     }
   },
   es: {
@@ -167,11 +207,18 @@ const translations: LanguageTranslations = {
       projects: "Proyectos",
       skills: "Habilidades",
       about: "Sobre Mí",
-      contact: "Contacto"
+      contact: "Contacto",
+      resume: "Currículum",
+      switchToEnglish: "Switch to English",
+      switchToSpanish: "Cambiar a Español"
     },
     hero: {
       title: "Hola, soy",
-      role: "Desarrollador Full Stack"
+      role: "Desarrollador Full Stack",
+      viewProjects: "Ver Proyectos",
+      downloadCV: "Descargar CV",
+      contactMe: "Contáctame",
+      scrollDown: "Empieza a deslizar"
     },
     projects: {
       title: "Proyectos Destacados",
@@ -180,53 +227,47 @@ const translations: LanguageTranslations = {
       video: "Video",
       codeNotAvailable: "Código No Disponible",
       error: "Este proyecto es privado o está bajo un acuerdo de confidencialidad.",
-      closeButton: "Cerrar"
+      closeButton: "Cerrar",
+      imagePreview: "Vista Previa del Proyecto",
+      clickToEnlarge: "Click para ampliar imagen",
+      videoNotSupported: "Tu navegador no soporta la etiqueta de video."
     },
     about: {
       title: "Sobre Mí",
       description: "Soy un desarrollador apasionado por crear experiencias digitales únicas y funcionales. Con experiencia en desarrollo web full stack, me especializo en construir aplicaciones robustas y escalables.",
-      skills: "Mis Habilidades",
-      experienceTitle: "Experiencia Destacada",
+      skillsTitle: "Mis Habilidades",
+      experienceTitle: "Experiencia Profesional",
       experienceDetails: [
         {
-          id: "cnc",
-          title: "Prácticas Profesionales",
+          role: "Prácticas Profesionales",
           company: "Centro Nacional de Consultoría (CNC)",
-          summary: "Realicé mis prácticas profesionales durante un año, integrándome en un equipo de trabajo multidisciplinario de aproximadamente 7 personas. Esta experiencia fue fundamental para consolidar mis conocimientos técnicos y aplicarlos en proyectos reales, al mismo tiempo que fortalecía mis habilidades de colaboración y comunicación interfuncional.",
-          details: [
-            "Mantenimiento Aplicativos: Colaboré activamente en el mantenimiento correctivo y evolutivo de diversas aplicaciones web existentes. Esto implicó trabajar con tecnologías como React.js, PHP, Python (Django, FastAPI) y PostgreSQL, interactuando no solo con otros desarrolladores sino también con diseñadores y gestores para entender requerimientos y entregar soluciones. En varios proyectos, trabajamos simultáneamente hasta 3 desarrolladores en tareas específicas, requiriendo una coordinación eficaz y comunicación constante dentro del equipo más amplio.",
-            "Desarrollo Aplicaciones Web: Participé en el ciclo de desarrollo de nuevas aplicaciones web, desde la implementación de funcionalidades hasta el apoyo en pruebas. Tuve la oportunidad de aplicar tecnologías modernas y colaborar con diferentes roles para llevar las ideas a la práctica:",
-            "Frontend: Contribuí al desarrollo de interfaces con React.js y Next.js, utilizando Tailwind CSS y trabajando a partir de diseños proporcionados.",
-            "Backend: Colaboré en la creación de APIs utilizando FastAPI (Python) y Node.js, asegurando que cumplieran con las necesidades funcionales definidas.",
-            "Cloud: Me familiaricé con conceptos básicos de despliegue y gestión de aplicaciones en AWS, apoyando las tareas del equipo en esta área.",
-            "Esta práctica me permitió no solo aplicar mis habilidades técnicas en un entorno profesional, sino también desarrollar significativamente mis habilidades blandas, como el trabajo en equipo, la comunicación asertiva con diferentes roles (desarrollo, diseño, gestión) y la resolución conjunta de problemas en un entorno altamente colaborativo y multidisciplinario."
-          ],
-          skills: ["Tailwind CSS", "WebSockets", "AWS", "PHP", "Node.js", "Django REST framework", "Next.js", "TypeScript", "Python", "Git", "FastAPI", "PostgreSQL", "React.js"]
+          date: "Ene 2023 - Ene 2024",
+          responsibilities: [
+            "Contribuí al mantenimiento y desarrollo de aplicaciones web usando React.js, PHP y Python (Django, FastAPI).",
+            "Trabajé en un equipo multidisciplinar, colaborando con diseñadores y gerentes para entregar soluciones efectivas.",
+            "Participé en el ciclo completo de desarrollo, desde la implementación de funcionalidades hasta el soporte en pruebas.",
+            "Gané experiencia con AWS para el despliegue y gestión de aplicaciones."
+          ]
         },
         {
-          id: "colcambios",
-          title: "Desarrollador Full Stack",
+          role: "Desarrollador Full Stack",
           company: "ColCambios",
-          summary: "Trabajando en estrecha colaboración con otro desarrollador, participé activamente en la evolución tecnológica de la plataforma de intercambio de divisas de la compañía, adquiriendo y aplicando nuevas tecnologías sobre la marcha.",
-          details: [
-            "Mantenimiento y Actualización Web Inicial: Colaboramos en la realización de mejoras funcionales, corrección de errores y actualizaciones en el sitio web existente (HTML, CSS, JavaScript, PHP) para garantizar su correcto funcionamiento.",
-            "Modernización Integral (Remodelación Web): Contribuí significativamente, como parte de un equipo de dos, a la reconstrucción de la plataforma web. Participé en el desarrollo de componentes frontend utilizando React.js, lo que representó un aprendizaje práctico intensivo y resultó en una mejora notable de la interfaz de usuario. Colaboré en la implementación de los servicios backend con Node.js y Express.js, manejando la lógica de negocio y la conexión con la base de datos MySQL.",
-            "Desarrollo de Aplicación Móvil Administrativa: Participé junto a mi compañero en el desarrollo de una aplicación móvil multiplataforma interna utilizando React Native. A través de este proyecto, apliqué mis conocimientos en desarrollo móvil para crear una herramienta que permitió al equipo administrativo gestionar operaciones clave de forma más eficiente, conectándose a un backend en Express.js.",
-            "Este rol fue una oportunidad clave para aprender y aplicar tecnologías modernas como React.js, Node.js y React Native en un entorno de producción real, trabajando siempre de forma colaborativa."
-          ],
-          skills: ["MySQL", "WebSockets", "Express.js", "PHP", "Node.js", "TypeScript", "Comunicación Asertiva", "Git", "Trabajo en equipo", "React Native", "React.js"]
+          date: "Jun 2022 - Dic 2022",
+          responsibilities: [
+            "Modernicé la plataforma de cambio de divisas de la empresa, migrando de un sistema legado a un stack con React.js y Node.js.",
+            "Desarrollé una aplicación móvil multiplataforma con React Native para la gestión administrativa interna.",
+            "Manejé tareas tanto de frontend (React.js) como de backend (Node.js, Express.js) en un equipo de dos personas."
+          ]
         },
         {
-          id: "freelance",
-          title: "Desarrollador Freelance",
+          role: "Desarrollador Freelance",
           company: "Proyectos Independientes",
-          summary: "Desarrollé diversas soluciones de software personalizadas para clientes, centrándome en la automatización y el procesamiento de documentos.",
-          details: [
-            "Creé bots de automatización para agilizar tareas repetitivas y mejorar la eficiencia de los clientes.",
-            "Desarrollé programas para la modificación avanzada de PDFs, incluyendo extracción de datos, fusión y llenado de formularios.",
-            "Gestioné la comunicación con clientes, la recopilación de requisitos y la entrega de proyectos de forma independiente."
-          ],
-          skills: ["Python", "TypeScript", "Node.js", "WordPress", "Web Scraping", "Integración de API", "n8n", "Comunicación con Clientes"]
+          date: "2021 - Actualidad",
+          responsibilities: [
+            "Creé bots y scripts de automatización para agilizar tareas repetitivas para diversos clientes.",
+            "Desarrollé aplicaciones a medida para la manipulación avanzada de PDF y extracción de datos.",
+            "Gestioné de forma autónoma la comunicación con clientes, la recopilación de requisitos y la entrega de proyectos."
+          ]
         }
       ],
       skillCategories: {
@@ -253,10 +294,26 @@ const translations: LanguageTranslations = {
       send: "Enviar Mensaje",
       namePlaceholder: "Tu Nombre",
       emailPlaceholder: "tu@email.com",
-      messagePlaceholder: "Tu mensaje..."
+      messagePlaceholder: "Tu mensaje...",
+      description: "¿Tienes un proyecto en mente? ¡Conversemos!",
+      whatsappMessage: "¡Hola! Me interesa contactarte para un proyecto.",
+      whatsappButton: "Contactar por WhatsApp",
+      emailDescription: "O escríbeme directamente a:"
     },
     footer: {
-      rights: "Todos los derechos reservados."
+      rights: "Todos los derechos reservados.",
+      madeWith: {
+        text1: "Hecho con",
+        text2: "por",
+        text3: "y"
+      },
+      builtWith: "Desarrollado con",
+      technologies: "Next.js, TypeScript, Three.js, Tailwind CSS, Lenis y GSAP",
+      author: "Nicolas Rivera",
+      backToTop: "Volver al Inicio"
+    },
+    common: {
+      backToTop: "Volver al Inicio"
     }
   }
 } as const;

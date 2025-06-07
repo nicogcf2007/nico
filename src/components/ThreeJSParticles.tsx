@@ -1,305 +1,200 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { isMobileDevice, isLowEndDevice } from '../utils/deviceDetection';
 
-interface ThreeJSParticlesProps {
-    mousePosition?: { x: number; y: number };
-    scrollY?: number;
-}
-
+// --- Configuración Optimizada ---
 const getOptimizedConfig = () => {
     const isMobile = isMobileDevice();
     const isLowEnd = isLowEndDevice();
-
     return {
-        particleCount: isLowEnd ? 250 : isMobile ? 400 : 500,
-        spread: isLowEnd ? 100 : isMobile ? 120 : 150,
-        velocityMultiplier: isLowEnd ? 0.3 : isMobile ? 0.38 : 0.5,
-        scrollMultiplier: isLowEnd ? 0.0039 : isMobile ? 0.0065 : 0.013,
-        mouseMultiplier: isLowEnd ? 0.03 : isMobile ? 0.05 : 0.1,
-        antialias: !isMobile,
-        pixelRatio: isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio,
-        renderOnDemand: isLowEnd,
-        zRange: isLowEnd ? 180 : isMobile ? 220 : 200,
-        recycleDistance: isLowEnd ? 8 : isMobile ? 10 : 6
+        particleCount: isLowEnd ? 100 : isMobile ? 200 : 300,
+        spread: isLowEnd ? 60 : isMobile ? 80 : 100,
+        velocityMultiplier: isLowEnd ? 0.2 : isMobile ? 0.3 : 0.4,
+        scrollMultiplier: isLowEnd ? 0.004 : isMobile ? 0.006 : 0.008,
+        mouseMultiplier: isLowEnd ? 0.03 : isMobile ? 0.045 : 0.09,
+        pixelRatio: Math.min(window.devicePixelRatio, isLowEnd ? 1 : isMobile ? 1.2 : 1.5),
+        maxFPS: isLowEnd ? 25 : isMobile ? 45 : 60,
+        zRange: isLowEnd ? 120 : isMobile ? 150 : 180,
     };
 };
 
-const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({
-    mousePosition: mousePositionProp = { x: 0, y: 0 }, 
-    scrollY: scrollYProp = 0
-}) => {
+// --- Types ---
+interface ThreeJSProps {
+    mousePosition: { x: number; y: number };
+    scrollY: number;
+}
+
+interface ThreeJSParticlesProps {
+    propsRef: React.RefObject<ThreeJSProps>;
+}
+
+// --- Componente Principal ---
+const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const animationIdRef = useRef<number | null>(null);
-    const sceneRef = useRef<{
-        scene: THREE.Scene;
-        camera: THREE.PerspectiveCamera;
-        renderer: THREE.WebGLRenderer;
-        stars: THREE.Points;
-        velocities: Float32Array;
-        geometry: THREE.BufferGeometry;
-        material: THREE.ShaderMaterial;
-    } | null>(null);
-    
-    const lastFrameTime = useRef<number>(0);
-    const frameCount = useRef<number>(0);
     const config = useMemo(() => getOptimizedConfig(), []);
 
-    const mousePosPropRef = useRef(mousePositionProp);
-    const scrollYPropRef = useRef(scrollYProp);
-
-    const updateMousePosition = useCallback((mousePosition: { x: number; y: number }) => {
-        mousePosPropRef.current = mousePosition;
-    }, []);
-
-    const updateScrollY = useCallback((scrollY: number) => {
-        scrollYPropRef.current = scrollY;
-    }, []);
-
     useEffect(() => {
-        updateMousePosition(mousePositionProp);
-    }, [mousePositionProp, updateMousePosition]);
-
-    useEffect(() => {
-        updateScrollY(scrollYProp);
-    }, [scrollYProp, updateScrollY]);
-
-    useEffect(() => {
+        console.log('[ThreeJSParticles] ✨ Component mounted & Three.js scene initialized');
         if (!containerRef.current) return;
 
-        const currentConfig = config;
-
-        // Crear escena
+        let animationId: number;
+        const parentElement = containerRef.current;
+        
+        // --- Inicialización ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
-        camera.position.z = 4; 
+        camera.position.z = 4;
 
-        // Configuración optimizada del renderer
-        const renderer = new THREE.WebGLRenderer({ 
-            alpha: true, 
-            antialias: currentConfig.antialias,
-            powerPreference: isMobileDevice() ? 'low-power' : 'high-performance',
-            stencil: false,
-            depth: false
+        const renderer = new THREE.WebGLRenderer({
+            alpha: true, powerPreference: 'low-power', antialias: false,
+            depth: false, stencil: false,
         });
-        
-        renderer.setPixelRatio(currentConfig.pixelRatio);
+        renderer.setPixelRatio(config.pixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0x000000, 0);
-        
-        if (isMobileDevice()) {
-            renderer.shadowMap.enabled = false;
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-        }
+        parentElement.appendChild(renderer.domElement);
 
-        // Limpiar contenedor
-        while (containerRef.current.firstChild) {
-            containerRef.current.removeChild(containerRef.current.firstChild);
-        }
-        containerRef.current.appendChild(renderer.domElement);
+        const positions = new Float32Array(config.particleCount * 3);
+        const sizes = new Float32Array(config.particleCount);
+        const velocities = new Float32Array(config.particleCount * 3);
 
-        // Configurar partículas
-        const particleCount = currentConfig.particleCount;
-        const positions = new Float32Array(particleCount * 3);
-        const sizes = new Float32Array(particleCount);
-        const colors = new Float32Array(particleCount * 3);
-        const localVelocities = new Float32Array(particleCount * 3);
+        const Z_POS_MIN_LOCAL = -config.zRange;
+        const SPREAD_XY = config.spread;
 
-        const Z_POS_MAX_LOCAL = -5;
-        const Z_POS_MIN_LOCAL = -currentConfig.zRange;
-        const SPREAD_XY = currentConfig.spread;
-
-        // Generación optimizada de partículas
-        for (let i = 0; i < particleCount; i++) {
+        for (let i = 0; i < config.particleCount; i++) {
             const i3 = i * 3;
+            positions[i3] = (Math.random() - 0.5) * SPREAD_XY;
+            positions[i3 + 1] = (Math.random() - 0.5) * SPREAD_XY;
+            positions[i3 + 2] = Math.random() * Z_POS_MIN_LOCAL;
+            sizes[i] = Math.random() * 3.5 + 1.5;
             
-            const centerBias = isMobileDevice() ? 0.8 : 0.7;
-            const spreadMultiplier = isMobileDevice() ? 1.2 : 1.0;
-            positions[i3] = (Math.random() - 0.5) * SPREAD_XY * centerBias * spreadMultiplier;
-            positions[i3 + 1] = (Math.random() - 0.5) * SPREAD_XY * centerBias * spreadMultiplier;
-            const zDistribution = isMobileDevice() ? Math.random() * 1.3 : Math.random();
-            positions[i3 + 2] = Math.min(zDistribution, 1.0) * (Z_POS_MAX_LOCAL - Z_POS_MIN_LOCAL) + Z_POS_MIN_LOCAL;
-
-            // Tamaños
-            const starType = Math.random();
-            if (starType < 0.7) {
-                sizes[i] = Math.random() * 1.8 + 0.8;
-            } else {
-                sizes[i] = Math.random() * 3.5 + 1.5;
-            }
-
-            // Colores
-            const colorType = Math.random();
-            if (colorType < 0.7) { 
-                colors[i3] = colors[i3 + 1] = colors[i3 + 2] = 1.0; 
-            } else { 
-                colors[i3] = 1.0; 
-                colors[i3 + 1] = 1.0; 
-                colors[i3 + 2] = 0.8; 
-            }
-
-            const baseVelocity = 0.003 * currentConfig.velocityMultiplier;
-            localVelocities[i3] = (Math.random() - 0.5) * baseVelocity;
-            localVelocities[i3 + 1] = (Math.random() - 0.5) * baseVelocity;
-            localVelocities[i3 + 2] = (0.02 + Math.random() * 0.03) * currentConfig.velocityMultiplier;
+            const baseVelocity = 0.002 * config.velocityMultiplier;
+            velocities[i3] = (Math.random() - 0.5) * baseVelocity;
+            velocities[i3 + 1] = (Math.random() - 0.5) * baseVelocity;
+            velocities[i3 + 2] = (0.015 + Math.random() * 0.02) * config.velocityMultiplier;
         }
 
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
+        
         const material = new THREE.ShaderMaterial({
             vertexShader: `
                 attribute float size;
-                attribute vec3 color;
-                varying vec3 vColor;
                 void main() {
-                    vColor = color;
                     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                    gl_PointSize = size * (60.0 / -mvPosition.z);
+                    gl_PointSize = size * (90.0 / -mvPosition.z);
                     gl_Position = projectionMatrix * mvPosition;
                 }
             `,
             fragmentShader: `
-                varying vec3 vColor;
                 void main() {
-                    float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
-                    float alpha = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
-                    gl_FragColor = vec4(vColor, alpha);
+                    float dist = distance(gl_PointCoord, vec2(0.5));
+                    if (dist > 0.5) discard;
+                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0 - smoothstep(0.0, 0.5, dist));
                 }
             `,
             transparent: true,
             blending: THREE.AdditiveBlending,
-            depthWrite: false
+            depthWrite: false,
         });
 
         const stars = new THREE.Points(geometry, material);
         scene.add(stars);
 
-        // Guardar referencias
-        sceneRef.current = {
-            scene,
-            camera,
-            renderer,
-            stars,
-            velocities: localVelocities,
-            geometry,
-            material
-        };
+        let lastFrameTime = -1;
+        let frameCount = 0;
+        let lastLogTime = performance.now();
 
-        const initialStarsZ = 0;
+        // --- Bucle de Animación ---
+        const animate = (time: number) => {
+            animationId = requestAnimationFrame(animate);
 
-        const animate = (currentTime: number = 0) => {
-            if (!sceneRef.current) return;
+            if (!propsRef.current || document.hidden) return;
 
-            const { stars, velocities, camera, renderer, scene } = sceneRef.current;
-
-            // Control de FPS para dispositivos de baja gama
-            if (currentConfig.renderOnDemand) {
-                const deltaTime = currentTime - lastFrameTime.current;
-                if (deltaTime < 50) {
-                    animationIdRef.current = requestAnimationFrame(animate);
-                    return;
-                }
-                lastFrameTime.current = currentTime;
+            const now = performance.now();
+            frameCount++;
+            if (now - lastLogTime > 5000) { // Log every 5 seconds
+                const fps = frameCount / ((now - lastLogTime) / 1000);
+                console.log(`[ThreeJSParticles] rAF Loop FPS: ${fps.toFixed(2)}`);
+                frameCount = 0;
+                lastLogTime = now;
             }
 
-            const positionAttribute = stars.geometry.attributes.position as THREE.BufferAttribute;
-            const positionsArray = positionAttribute.array as Float32Array;
+            const targetFrameTime = 1000 / config.maxFPS;
+            const deltaTime = time - lastFrameTime;
 
-            // Movimiento del grupo de estrellas con scroll
-            stars.position.z = initialStarsZ + (scrollYPropRef.current * currentConfig.scrollMultiplier); 
-
-            // Actualización de partículas
-            frameCount.current++;
-            const updateStep = currentConfig.renderOnDemand ? 3 : isMobileDevice() ? 2 : 1;
+            if (deltaTime < targetFrameTime) return;
             
-            if (frameCount.current % updateStep === 0) {
-                for (let i = 0; i < particleCount; i++) {
-                    const i3 = i * 3;
-                    
-                    positionsArray[i3] += velocities[i3];
-                    positionsArray[i3 + 1] += velocities[i3 + 1];
-                    positionsArray[i3 + 2] += velocities[i3 + 2];
+            lastFrameTime = time;
+            const positionAttribute = geometry.attributes.position as THREE.BufferAttribute;
 
-                    const starGlobalZ = stars.position.z + positionsArray[i3 + 2];
-                    
-                    if (starGlobalZ > camera.position.z + currentConfig.recycleDistance) { 
-                        positionsArray[i3 + 2] = Z_POS_MIN_LOCAL - (Math.random() * currentConfig.zRange * 0.3); 
-                        const centerBias = isMobileDevice() ? 0.8 : 0.7;
-                        const extraSpread = isMobileDevice() ? 1.2 : 1.0;
-                        positionsArray[i3] = (Math.random() - 0.5) * SPREAD_XY * centerBias * extraSpread;
-                        positionsArray[i3 + 1] = (Math.random() - 0.5) * SPREAD_XY * centerBias * extraSpread;
-                        
-                        const baseVelocity = 0.003 * currentConfig.velocityMultiplier;
-                        velocities[i3] = (Math.random() - 0.5) * baseVelocity;
-                        velocities[i3 + 1] = (Math.random() - 0.5) * baseVelocity;
-                        velocities[i3 + 2] = (0.02 + Math.random() * 0.03) * currentConfig.velocityMultiplier;
-                    }
+            const timeScale = deltaTime / 16.67;
+            for (let i = 0; i < config.particleCount; i++) {
+                const i3 = i * 3;
+                positionAttribute.array[i3] += velocities[i3] * timeScale;
+                positionAttribute.array[i3 + 1] += velocities[i3 + 1] * timeScale;
+                positionAttribute.array[i3 + 2] += velocities[i3 + 2] * timeScale;
+
+                if (stars.position.z + positionAttribute.array[i3 + 2] > camera.position.z + 10) {
+                    positionAttribute.array[i3 + 2] = -config.zRange - Math.random() * 0.2;
+                    positionAttribute.array[i3] = (Math.random() - 0.5) * config.spread;
+                    positionAttribute.array[i3 + 1] = (Math.random() - 0.5) * config.spread;
                 }
-                positionAttribute.needsUpdate = true;
             }
+            positionAttribute.needsUpdate = true;
             
-            // Paralaje del ratón
-            const mouseMultiplier = currentConfig.mouseMultiplier;
-            stars.position.x = mousePosPropRef.current.x * mouseMultiplier;
-            stars.position.y = -mousePosPropRef.current.y * mouseMultiplier;
+            const { mousePosition, scrollY } = propsRef.current;
+            stars.position.x = mousePosition.x * config.mouseMultiplier;
+            stars.position.y = -mousePosition.y * config.mouseMultiplier;
+            stars.position.z = scrollY * config.scrollMultiplier;
 
             renderer.render(scene, camera);
-            animationIdRef.current = requestAnimationFrame(animate);
         };
 
-        animationIdRef.current = requestAnimationFrame(animate);
-
+        // --- Manejadores de Eventos ---
         const handleResize = () => {
-            if (sceneRef.current) {
-                const { camera, renderer } = sceneRef.current;
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            }
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         };
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize, { passive: true });
+        
+        animate(0);
 
+        // --- Limpieza ---
         return () => {
+            console.log('[ThreeJSParticles] 🧹 Component unmounted & Three.js resources cleaned up');
+            cancelAnimationFrame(animationId);
             window.removeEventListener('resize', handleResize);
-            if (animationIdRef.current) {
-                cancelAnimationFrame(animationIdRef.current);
-            }
-            
-            // Limpieza completa de recursos Three.js
-            if (sceneRef.current) {
-                const { scene, renderer, geometry, material } = sceneRef.current;
-                
-                // Limpiar geometría
-                geometry.dispose();
-                
-                // Limpiar material
-                material.dispose();
-                
-                // Limpiar renderer
-                renderer.dispose();
-                renderer.forceContextLoss();
-                
-                // Limpiar escena
-                scene.clear();
-                
-                // Limpiar contenedor DOM
-                if (containerRef.current) {
-                    while (containerRef.current.firstChild) {
-                        containerRef.current.removeChild(containerRef.current.firstChild);
+
+            // Vaciar y destruir la escena de Three.js
+            scene.traverse(object => {
+                if (object instanceof THREE.Mesh || object instanceof THREE.Points) {
+                    if (object.geometry) object.geometry.dispose();
+                    if (object.material) {
+                        if (Array.isArray(object.material)) {
+                            object.material.forEach(mat => mat.dispose());
+                        } else {
+                            object.material.dispose();
+                        }
                     }
                 }
-                
-                sceneRef.current = null;
+            });
+            scene.clear();
+            
+            renderer.dispose();
+            renderer.forceContextLoss();
+
+            if (parentElement.contains(renderer.domElement)) {
+                parentElement.removeChild(renderer.domElement);
             }
         };
-    }, []);
+    }, [config, propsRef]);
 
-    return <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }} />;
+    return <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />;
 };
 
 export default ThreeJSParticles; 

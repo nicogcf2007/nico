@@ -1,19 +1,34 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+// import SmoothScroll from '../components/SmoothScroll'
+import { Inter } from 'next/font/google'
 import '../index.css'
-import SmoothScroll from '../components/SmoothScroll'
+import Background from '../sections/Background'
+import ClientWrapper from './ClientWrapper'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'NRDev Portfolio',
-  description: 'Portfolio personal de Nicolas Rojas - Desarrollador Full Stack especializado en React, Next.js y Three.js',
-  keywords: 'portfolio, desarrollador, full stack, react, next.js, three.js, typescript',
-  authors: [{ name: 'Nicolas Rojas' }],
+  title: 'Nicolas Rivera - Desarrollador Full Stack',
+  description: 'Portafolio de Nicolas Rivera, desarrollador full stack especializado en React, Next.js, Node.js y más.',
+  keywords: 'desarrollador full stack, React, Next.js, Node.js, TypeScript, JavaScript, portfolio',
+  authors: [{ name: 'Nicolas Rivera' }],
+  robots: 'index, follow',
   openGraph: {
-    title: 'NRDev Portfolio',
-    description: 'Portfolio personal de Nicolas Rojas - Desarrollador Full Stack',
+    title: 'Nicolas Rivera - Desarrollador Full Stack',
+    description: 'Portafolio de Nicolas Rivera, desarrollador full stack especializado en React, Next.js, Node.js y más.',
     type: 'website',
+    locale: 'es_ES',
   },
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#1a1a1a',
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nicolas Rivera - Desarrollador Full Stack',
+    description: 'Portafolio de Nicolas Rivera, desarrollador full stack especializado en React, Next.js, Node.js y más.',
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -23,10 +38,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="antialiased">
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+      <body className={inter.className}>
+        <Background />
+        <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>
   )

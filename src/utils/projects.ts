@@ -2,7 +2,6 @@ import colcambiosImage from '../projects/images/colcambios.png';
 import transcriptionsImage from '../projects/images/transcriptions.png';
 import rttImage from '../projects/images/rtt.png';
 import ragImage from '../projects/images/rag.png';
-import rttVideo from '../projects/videos/rtt.mp4';
 
 export interface Project {
   id: number;
@@ -55,7 +54,7 @@ export const getProjects = (language: 'es' | 'en'): Project[] => {
         : 'Full-stack development of a web application for real-time transcriptions. Upon completion, the system generates reports in different formats (Excel, PDF, or Word) according to user preferences.',
       image: rttImage,
       technologies: ['React.js (Vite)', 'FastAPI', 'Tailwind CSS', 'TypeScript', 'WebSockets'],
-      videoUrl: rttVideo,
+      videoUrl: '/videos/rtt.mp4',
       codeUrl: 'https://github.com/nicogcf2007/rtm-transcriptions'
     },
   ];
