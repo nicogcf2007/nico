@@ -13,10 +13,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ title, skills, icon, className })
 
   return (
     <motion.div
-      className={`flex flex-col h-full overflow-hidden rounded-lg border shadow-md bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg transition-all duration-300 ${className}`}
-      whileHover={{
-         y: -5
-      }}
+      className={`flex flex-col h-full overflow-hidden rounded-lg border shadow-md bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${className}`}
     >
       {/* Card Header */}
       <div className="flex items-center gap-3 p-4 border-b border-border/50 bg-surface/20">

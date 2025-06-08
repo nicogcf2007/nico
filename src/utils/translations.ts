@@ -34,6 +34,9 @@ export interface Translations {
     imagePreview: string;
     clickToEnlarge: string;
     videoNotSupported: string;
+    scrollToExplore: string;
+    readMore: string;
+    projectDetails: string;
   };
   about: {
     title: string;
@@ -50,6 +53,12 @@ export interface Translations {
     };
     softSkillsList: readonly string[];
     experienceDetails: readonly ExperienceDetail[];
+    imagePreview: string;
+    clickToEnlarge: string;
+    videoNotSupported: string;
+    scrollToExplore: string;
+    readMore: string;
+    projectDetails: string;
   };
   contact: {
     title: string;
@@ -116,7 +125,10 @@ const translations: LanguageTranslations = {
       closeButton: "Close",
       imagePreview: "Project Preview",
       clickToEnlarge: "Click to enlarge image",
-      videoNotSupported: "Your browser does not support the video tag."
+      videoNotSupported: "Your browser does not support the video tag.",
+      scrollToExplore: "Scroll to explore",
+      readMore: "Read More",
+      projectDetails: "Project Details"
     },
     about: {
       title: "About Me",
@@ -171,6 +183,12 @@ const translations: LanguageTranslations = {
         "Problem Solving",
         "Continuous Learning"
       ],
+      imagePreview: "Project Preview",
+      clickToEnlarge: "Click to enlarge image",
+      videoNotSupported: "Your browser does not support the video tag.",
+      scrollToExplore: "Scroll to explore",
+      readMore: "Read More",
+      projectDetails: "Project Details"
     },
     contact: {
       title: "Contact",
@@ -230,7 +248,10 @@ const translations: LanguageTranslations = {
       closeButton: "Cerrar",
       imagePreview: "Vista Previa del Proyecto",
       clickToEnlarge: "Click para ampliar imagen",
-      videoNotSupported: "Tu navegador no soporta la etiqueta de video."
+      videoNotSupported: "Tu navegador no soporta la etiqueta de video.",
+      scrollToExplore: "Scroll para explorar",
+      readMore: "Leer Más",
+      projectDetails: "Detalles del Proyecto"
     },
     about: {
       title: "Sobre Mí",
@@ -271,20 +292,26 @@ const translations: LanguageTranslations = {
         }
       ],
       skillCategories: {
-         webFrontend: "Frontend Web",
-         appDevelopment: "Desarrollo de Aplicaciones",
-         backend: "Backend",
-         databases: "Bases de Datos y BaaS",
-         devopsPlatforms: "DevOps y Plataformas",
-         softSkills: "Habilidades Blandas"
+        webFrontend: "Frontend Web",
+        appDevelopment: "Desarrollo de Aplicaciones",
+        backend: "Backend",
+        databases: "Bases de Datos y BaaS",
+        devopsPlatforms: "DevOps y Plataformas",
+        softSkills: "Habilidades Blandas"
       },
       softSkillsList: [
-        "Trabajo en equipo",
+        "Trabajo en Equipo",
         "Comunicación Asertiva",
-        "Capacidad de análisis",
+        "Pensamiento Analítico",
         "Resolución de Problemas",
         "Aprendizaje Continuo"
       ],
+      imagePreview: "Vista Previa del Proyecto",
+      clickToEnlarge: "Click para ampliar imagen",
+      videoNotSupported: "Tu navegador no soporta la etiqueta de video.",
+      scrollToExplore: "Scroll para explorar",
+      readMore: "Leer Más",
+      projectDetails: "Detalles del Proyecto"
     },
     contact: {
       title: "Contacto",

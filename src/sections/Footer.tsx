@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { LanguageTranslations } from '../utils/translations';
+import { useLanguage } from '../hooks/useLanguage';
 import { Heart, Code, Coffee, ArrowUp } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,11 +7,8 @@ import { isMobileDevice } from '../utils/deviceDetection';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface FooterProps {
-  t: LanguageTranslations[keyof LanguageTranslations];
-}
-
-const Footer: React.FC<FooterProps> = ({ t }) => {
+const Footer: React.FC = () => {
+  const { t } = useLanguage();
   const footerRef = useRef<HTMLElement>(null);
   const authorRef = useRef<HTMLHeadingElement>(null);
   const madeWithRef = useRef<HTMLDivElement>(null);

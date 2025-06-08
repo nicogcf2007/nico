@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import translations, { Translations, LanguageTranslations } from '../utils/translations';
+import React, { useEffect, useRef } from 'react';
+import { useLanguage } from '../hooks/useLanguage';
 import Navigator from '../sections/Navigator';
 import Hero from '../sections/Hero';
 import Projects from '../sections/Projects';
@@ -11,14 +11,9 @@ import Footer from '../sections/Footer';
 import gsap from 'gsap';
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<keyof LanguageTranslations>('es');
-  const [t, setT] = useState<Translations>(translations.es);
+  const { t } = useLanguage();
   const logoRef = useRef<HTMLDivElement>(null);
   
-  useEffect(() => {
-    setT(translations[language]);
-  }, [language]);
-
   useEffect(() => {
     // Animación inicial del logo
     if (logoRef.current) {
@@ -73,15 +68,15 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
         </button>
       </div>
       
-      <Navigator t={t} language={language} setLanguage={setLanguage} />
+      <Navigator />
       <main>
-        <Hero t={t} />
-        <Projects t={t} language={language} />
-        <About t={t} />
-        <Contact t={t} />
+        <Hero />
+        <Projects />
+        <About />
+        <Contact />
         {children}
       </main>
-      <Footer t={t} />
+      <Footer />
     </>
   );
 }

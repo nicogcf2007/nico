@@ -11,6 +11,13 @@
 # production
 /build
 
+# next.js
+/.next/
+/out/
+
+# turbo
+.turbo
+
 # misc
 .DS_Store
 .env.local

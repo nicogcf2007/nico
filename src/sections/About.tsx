@@ -1,17 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import SkillCard from '../components/SkillCard';
-import { LanguageTranslations, ExperienceDetail } from '../utils/translations';
+import { useLanguage } from '../hooks/useLanguage';
+import { ExperienceDetail } from '../utils/translations';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface AboutProps {
-  t: LanguageTranslations[keyof LanguageTranslations];
-}
-
-const About: React.FC<AboutProps> = ({ t }) => {
+const About: React.FC = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
@@ -169,7 +167,8 @@ const About: React.FC<AboutProps> = ({ t }) => {
             scrollTrigger: { 
               trigger: skillsGridRef.current, 
               start: isMobile ? 'top 85%' : 'top 80%', 
-              toggleActions: 'restart none none reverse',
+              toggleActions: 'play none none none',
+              once: true,
               fastScrollEnd: true,
               refreshPriority: -1
             },
@@ -230,7 +229,8 @@ const About: React.FC<AboutProps> = ({ t }) => {
             scrollTrigger: { 
               trigger: experienceContainerRef.current, 
               start: isMobile ? 'top 85%' : 'top 80%', 
-              toggleActions: 'restart none none reverse',
+              toggleActions: 'play none none none',
+              once: true,
               fastScrollEnd: true,
               refreshPriority: -1
             },

@@ -1,15 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import socialLinks from '../utils/contacts';
-import { LanguageTranslations } from '../utils/translations';
+import { useLanguage } from '../hooks/useLanguage';
 import { Download, Eye, Mail, ChevronDown } from 'lucide-react';
 // @ts-ignore
 import gsap from 'gsap';
 
-interface HeroProps {
-  t: LanguageTranslations[keyof LanguageTranslations];
-}
-
-const Hero: React.FC<HeroProps> = ({ t }) => {
+const Hero: React.FC = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -118,9 +115,9 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
       style={{ opacity: 0 }}
     >
       {/* Contenedor principal que se ajusta para móvil y escritorio */}
-      <div className="flex-grow flex flex-col justify-center md:flex-grow-0">
+      <div className="flex flex-col justify-center md:flex-grow-0">
         <div className="px-4 w-full mx-auto max-w-6xl text-center">
-          <h1 ref={titleRef} className="mb-4 text-4xl font-bold sm:text-5xl md:text-7xl text-text-primary" style={{ opacity: 0 }}>
+          <h1 ref={titleRef} className="mb-4 text-5xl font-bold sm:text-6xl md:text-7xl text-text-primary" style={{ opacity: 0 }}>
             {t.hero.title}{' '}
             <span className="text-accent-light">
               Nicolas
@@ -134,7 +131,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
           <div ref={buttonsRef} className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <button
               onClick={() => scrollToSection('projects')}
-              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base bg-accent hover:bg-accent-hover text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               style={{ opacity: 0 }}
             >
               <Eye size={20} />
@@ -145,7 +142,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-6 py-3 bg-surface hover:bg-border text-text-primary rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base bg-surface hover:bg-border text-text-primary rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               style={{ opacity: 0 }}
             >
               <Download size={20} />
@@ -154,7 +151,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
             
             <button
               onClick={() => scrollToSection('contact')}
-              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-6 py-3 border-2 border-accent text-accent-light hover:bg-accent hover:text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="group flex items-center justify-center w-full sm:w-auto gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base border-2 border-accent text-accent-light hover:bg-accent hover:text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               style={{ opacity: 0 }}
             >
               <Mail size={20} />
@@ -165,7 +162,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
       </div>
 
       {/* Contenedor unificado para social y scroll en la parte inferior */}
-      <div className="w-full flex flex-col items-center gap-4 pt-8 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2">
+      <div className="w-full flex flex-col items-center gap-4 pt-4 md:pt-8 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2">
         {/* Iconos de redes sociales */}
         <div ref={socialRef} className="flex justify-center gap-x-4">
           {socialLinks.map(([href, icon, hoverColor], index) => (

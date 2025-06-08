@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from 'next'
-// import SmoothScroll from '../components/SmoothScroll'
+import SmoothScroll from '../components/SmoothScroll'
 import { Inter } from 'next/font/google'
 import '../index.css'
 import Background from '../sections/Background'
 import ClientWrapper from './ClientWrapper'
+import { LanguageProvider } from '../contexts/LanguageContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,8 +40,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
+        <SmoothScroll />
         <Background />
-        <ClientWrapper>{children}</ClientWrapper>
+        <LanguageProvider>
+          <ClientWrapper>{children}</ClientWrapper>
+        </LanguageProvider>
       </body>
     </html>
   )

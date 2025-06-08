@@ -23,7 +23,7 @@ const getOptimizedConfig = () => {
 // --- Types ---
 interface ThreeJSProps {
     mousePosition: { x: number; y: number };
-    scrollY: number;
+    scrollProgress: number;
 }
 
 interface ThreeJSParticlesProps {
@@ -146,10 +146,13 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
             }
             positionAttribute.needsUpdate = true;
             
-            const { mousePosition, scrollY } = propsRef.current;
+            const { mousePosition, scrollProgress } = propsRef.current;
+            const zMin = -6;
+            const zMax = 45;
+
             stars.position.x = mousePosition.x * config.mouseMultiplier;
             stars.position.y = -mousePosition.y * config.mouseMultiplier;
-            stars.position.z = scrollY * config.scrollMultiplier;
+            stars.position.z = zMin + (zMax - zMin) * scrollProgress;
 
             renderer.render(scene, camera);
         };

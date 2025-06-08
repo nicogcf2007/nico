@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@studio-freight/hamo": "^0.6.33",
+    "@studio-freight/lenis": "^1.0.42",
+    "@studio-freight/react-lenis": "^0.0.47",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -29,9 +32,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next build && next export",
-    "predeploy": "npm run export",
-    "deploy": "gh-pages -d out"
+    "deploy": "next build && (if not exist out\\.nojekyll echo. > out\\.nojekyll) && gh-pages -d out"
   },
   "browserslist": {
     "production": [

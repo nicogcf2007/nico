@@ -12,7 +12,7 @@ const ThreeJSParticles = dynamic(() => import('../components/ThreeJSParticles'),
 // --- Types ---
 interface DataRefType {
     mouse: { x: number; y: number; targetX: number; targetY: number };
-    scroll: { y: number; targetY: number };
+    scroll: { progress: number; targetProgress: number };
     isMobile: boolean;
     mouseParallaxFactor: number;
     scrollParallaxFactor: number;
@@ -22,7 +22,7 @@ interface DataRefType {
 
 interface ThreeJSProps {
     mousePosition: { x: number; y: number };
-    scrollY: number;
+    scrollProgress: number;
 }
 
 const nebulaConfigs = (isMobile: boolean) => ({
@@ -58,7 +58,7 @@ const Background = () => {
     
     const dataRef = useRef<DataRefType>({
         mouse: { x: 0, y: 0, targetX: 0, targetY: 0 },
-        scroll: { y: 0, targetY: 0 },
+        scroll: { progress: 0, targetProgress: 0 },
         isMobile: false,
         mouseParallaxFactor: 1.0,
         scrollParallaxFactor: 0.02,
@@ -66,7 +66,7 @@ const Background = () => {
         gradientRef: null,
     });
     
-    const threeJsPropsRef = useRef<ThreeJSProps>({ mousePosition: { x: 0, y: 0 }, scrollY: 0 });
+    const threeJsPropsRef = useRef<ThreeJSProps>({ mousePosition: { x: 0, y: 0 }, scrollProgress: 0 });
 
     useEffect(() => {
         console.log('[Background] ✨ Component mounted & animations started');
@@ -93,7 +93,8 @@ const Background = () => {
         };
 
         const handleScroll = () => {
-            data.scroll.targetY = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            data.scroll.targetProgress = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
         };
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -116,22 +117,22 @@ const Background = () => {
             
             data.mouse.x += (data.mouse.targetX - data.mouse.x) * lerpFactor;
             data.mouse.y += (data.mouse.targetY - data.mouse.y) * lerpFactor;
-            data.scroll.y += (data.scroll.targetY - data.scroll.y) * lerpFactor;
+            data.scroll.progress += (data.scroll.targetProgress - data.scroll.progress) * lerpFactor;
             
             threeJsPropsRef.current = {
                 mousePosition: { x: data.mouse.x, y: data.mouse.y },
-                scrollY: data.scroll.y,
+                scrollProgress: data.scroll.progress,
             };
 
             const mouseParallax = {
                 x: data.mouse.x * data.mouseParallaxFactor,
                 y: data.mouse.y * data.mouseParallaxFactor,
             };
-            const scrollParallax = data.scroll.y * data.scrollParallaxFactor;
+            const scrollParallax = data.scroll.progress * 100 * data.scrollParallaxFactor;
 
             const scrollEffectStart = isMobile ? 100 : 150;
             const scrollEffectRange = isMobile ? 2000 : 2500;
-            const currentScrollValue = Math.max(0, data.scroll.y - scrollEffectStart);
+            const currentScrollValue = Math.max(0, data.scroll.progress * (document.documentElement.scrollHeight - window.innerHeight) - scrollEffectStart);
             const progress = Math.min(currentScrollValue / scrollEffectRange, 1);
             
             const configs = nebulaConfigs(data.isMobile);

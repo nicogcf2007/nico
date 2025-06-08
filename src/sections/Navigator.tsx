@@ -1,21 +1,16 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { LanguageTranslations, Translations } from '../utils/translations';
 import { Globe, FileText } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '../hooks/useLanguage';
 import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
-type NavigatorProps = {
-  t: Translations;
-  language: keyof LanguageTranslations;
-  setLanguage: (value: keyof LanguageTranslations) => void;
-};
-
-const Navigator: React.FC<NavigatorProps> = ({ t, language, setLanguage }) => {
+const Navigator: React.FC = () => {
+  const { t, language, setLanguage } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const navRef = useRef<HTMLElement>(null);
@@ -73,29 +68,25 @@ const Navigator: React.FC<NavigatorProps> = ({ t, language, setLanguage }) => {
 
   return (
     <div className="flex fixed top-0 right-0 left-0 z-40 justify-center pt-2 px-2">
-      <nav ref={navRef} className="relative flex items-center px-2 py-1.5 space-x-2 rounded-full shadow-md">
+      <nav ref={navRef} className="relative flex items-center px-1 py-1 sm:py-1.5 space-x-1 rounded-full shadow-md">
         <div ref={backgroundRef} className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-full -z-20" />
         
-        <a href="#inicio" onClick={(e) => { e.preventDefault(); scrollToSection('inicio'); }} className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">
-          <div className="w-6 h-6 font-bold text-lg leading-none flex items-center justify-center">N</div>
-        </a>
-        
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-0 sm:space-x-1">
           {navigation.map((item) => (
-            <a key={item.id} href={`#${item.id}`} onClick={(e) => { e.preventDefault(); scrollToSection(item.id); }} className={`relative px-4 py-2 text-sm rounded-full transition-colors duration-200 text-text-secondary hover:text-text-primary ${activeSection === item.id ? 'bg-accent/80 text-text-primary' : ''}`}>
+            <a key={item.id} href={`#${item.id}`} onClick={(e) => { e.preventDefault(); scrollToSection(item.id); }} className={`relative px-2 sm:px-3 py-2 text-[11px] sm:text-sm rounded-full transition-colors duration-200 text-text-secondary hover:text-text-primary ${activeSection === item.id ? 'bg-accent/80 text-text-primary' : ''}`}>
               {item.label}
             </a>
           ))}
         </div>
         
-        <div className="w-px h-6 bg-border mx-2" />
+        <div className="w-px h-6 bg-border mx-1" />
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <a href="/cv.pdf" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">
-            <FileText size={18} />
+            <FileText size={16} />
           </a>
           <button onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">
-            <Globe size={18} />
+            <Globe size={16} />
           </button>
         </div>
       </nav>

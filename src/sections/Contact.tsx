@@ -1,16 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { LanguageTranslations } from '../utils/translations';
+import { useLanguage } from '../hooks/useLanguage';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface ContactProps {
-  t: LanguageTranslations[keyof LanguageTranslations];
-}
-
-const Contact: React.FC<ContactProps> = ({ t }) => {
+const Contact: React.FC = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -146,7 +143,7 @@ const Contact: React.FC<ContactProps> = ({ t }) => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="contact" className="relative py-20 z-10">
+    <section ref={sectionRef} id="contact" className="relative pt-20 pb-10 z-10">
       <div className="px-4 mx-auto max-w-4xl text-center">
         <h2 ref={titleRef} className="mb-12 text-3xl font-bold text-center md:text-4xl text-text-primary" style={{ opacity: 0 }}>
           {t.contact.title}
