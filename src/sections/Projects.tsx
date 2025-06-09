@@ -183,14 +183,16 @@ const Projects: React.FC = () => {
                   className="gsap-project-card flex-shrink-0 w-[90vw] sm:w-[80vw] md:w-[70vw] max-w-4xl"
                 >
                   <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-surface/80 via-surface/60 to-surface/40 backdrop-blur-xl border border-border/30 shadow-2xl h-full flex flex-col">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8 items-center h-full p-4 sm:p-6 md:p-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] lg:gap-8 items-center h-full p-4 sm:p-6 md:p-8">
                       <div className="lg:order-2 flex items-center justify-center max-h-[25vh] lg:max-h-full">
-                        <div className="relative group/image w-full aspect-video">
+                        <div 
+                          className="relative group/image w-full aspect-video cursor-pointer"
+                          onClick={() => openImagePopup(project.image)}
+                        >
                           <OptimizedImage
                             src={project.image}
                             alt={project.title}
-                            className="absolute inset-0 w-full h-full object-cover rounded-xl cursor-pointer transition-all duration-700 hover:scale-105 shadow-lg hover:shadow-2xl ring-1 ring-border/20"
-                            onClick={() => openImagePopup(project.image)}
+                            className="rounded-xl transition-all duration-700 group-hover/image:brightness-110 ring-1 ring-border/20 object-contain"
                             title={t.projects.clickToEnlarge}
                             quality={90}
                           />
@@ -201,8 +203,12 @@ const Projects: React.FC = () => {
                           </div>
                         </div>
                       </div>
+                      
+                      <div className="block lg:hidden w-full h-0.5 bg-gradient-to-r from-transparent via-border-accent to-transparent mx-auto mt-5 mb-3" />
 
-                      <div className="lg:order-1 flex flex-col justify-center space-y-2 sm:space-y-3 md:space-y-4 pt-4 lg:pt-0 pb-4">
+                      <div className="hidden lg:block lg:order-1 h-full w-0.5 bg-gradient-to-b from-transparent via-border-accent to-transparent self-center mr-4" />
+
+                      <div className="lg:order-0 flex flex-col justify-center space-y-1 sm:space-y-3 md:space-y-4 lg:pt-0 pb-2">
                         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-text-primary leading-tight">
                           {project.title}
                         </h3>
@@ -213,7 +219,7 @@ const Projects: React.FC = () => {
                           </p>
                         </div>
 
-                        <div className="!mt-auto pt-2">
+                        <div className="!mt-auto pt-1">
                           <button 
                             onClick={() => openDescriptionPopup(project)} 
                             className="inline-flex items-center text-xs sm:text-sm font-medium text-accent hover:text-accent-dark transition-colors"
@@ -239,7 +245,7 @@ const Projects: React.FC = () => {
                           )}
                         </div>
 
-                        <div className="flex flex-wrap gap-2 sm:gap-3 pt-2">
+                        <div className="flex flex-wrap gap-2 sm:gap-3 pt-1">
                           {project.demoUrl && (
                             <a
                               href={project.demoUrl}
@@ -260,10 +266,10 @@ const Projects: React.FC = () => {
                               className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2.5 bg-gradient-to-r from-surface/90 to-surface/70 text-text-primary font-semibold rounded-lg sm:rounded-xl border border-border/40 hover:border-accent-light/50 hover:bg-gradient-to-r hover:from-accent-light/15 hover:to-accent-light/10 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 group/btn backdrop-blur-sm text-xs sm:text-sm"
                             >
                               <Play size={14} className="mr-1.5 group-hover/btn:scale-110 transition-transform duration-300" />
-                              Video
+                              {t.projects.video || 'Video'}
                             </button>
                           )}
-                          {project.codeUrl ? (
+                           {project.codeUrl ? (
                             <a
                               href={project.codeUrl}
                               target="_blank"
@@ -271,7 +277,7 @@ const Projects: React.FC = () => {
                               className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2.5 bg-gradient-to-r from-surface/90 to-surface/70 text-text-primary font-semibold rounded-lg sm:rounded-xl border border-border/40 hover:border-accent-light/50 hover:bg-gradient-to-r hover:from-accent-light/15 hover:to-accent-light/10 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 group/btn backdrop-blur-sm text-xs sm:text-sm"
                             >
                               <Code2 size={14} className="mr-1.5 group-hover/btn:rotate-12 transition-transform duration-300" />
-                              Code
+                              {t.projects.code || 'Code'}
                             </a>
                           ) : (
                             <button
@@ -279,7 +285,7 @@ const Projects: React.FC = () => {
                               className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2.5 bg-gradient-to-r from-surface/90 to-surface/70 text-text-primary font-semibold rounded-lg sm:rounded-xl border border-border/40 hover:border-accent-light/50 hover:bg-gradient-to-r hover:from-accent-light/15 hover:to-accent-light/10 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 group/btn backdrop-blur-sm text-xs sm:text-sm"
                             >
                               <Code2 size={14} className="mr-1.5 group-hover/btn:rotate-12 transition-transform duration-300" />
-                              Code
+                              {t.projects.code || 'Code'}
                             </button>
                           )}
                         </div>
@@ -289,22 +295,22 @@ const Projects: React.FC = () => {
                 </article>
               ))}
             </div>
-
-            {/* Indicador de progreso lateral para desktop */}
-            <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-3 z-20">
-              {projects.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToProject(index)}
-                  className={`w-2 h-8 rounded-full transition-all duration-500 ${
-                    index === currentProjectIndex 
-                      ? 'bg-accent-light shadow-lg shadow-accent-light/30' 
-                      : 'bg-surface/40 hover:bg-surface/60'
-                  }`}
-                  aria-label={`Go to project ${index + 1}`}
-                />
-              ))}
-            </div>
+        </div>
+        
+        {/* Indicador de progreso lateral para desktop */}
+        <div className="hidden lg:flex absolute left-8 top-1/2 -translate-y-1/2 flex-col gap-3 z-20">
+          {projects.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToProject(index)}
+              className={`w-2 h-8 rounded-full transition-all duration-500 ${
+                index === currentProjectIndex 
+                  ? 'bg-accent-light shadow-lg shadow-accent-light/30' 
+                  : 'bg-surface/40 hover:bg-surface/60'
+              }`}
+              aria-label={`Go to project ${index + 1}`}
+            />
+          ))}
         </div>
 
         {/* Indicador de progreso inferior para móvil */}
@@ -318,31 +324,30 @@ const Projects: React.FC = () => {
             />
           ))}
         </div>
-      </div>
 
-      <VideoPopup
-        isOpen={videoPopupOpen}
-        onClose={() => setVideoPopupOpen(false)}
-        videoUrl={currentVideoUrl}
-      />
-      <CodeNotAvailablePopup
-        isOpen={codeNotAvailablePopupOpen}
-        onClose={() => setCodeNotAvailablePopupOpen(false)}
-      />
-      <ImagePopup
-        isOpen={imagePopupOpen}
-        onClose={() => setImagePopupOpen(false)}
-        imageUrl={currentImageUrl}
-      />
-
-      {descriptionPopupOpen && currentProjectDetails && (
-        <DescriptionPopup
-          isOpen={descriptionPopupOpen}
-          onClose={() => setDescriptionPopupOpen(false)}
-          title={currentProjectDetails.title}
-          description={currentProjectDetails.description}
+        <ImagePopup 
+          isOpen={imagePopupOpen} 
+          onClose={() => setImagePopupOpen(false)} 
+          imageUrl={currentImageUrl} 
         />
-      )}
+        <VideoPopup 
+          isOpen={videoPopupOpen} 
+          onClose={() => setVideoPopupOpen(false)} 
+          videoUrl={currentVideoUrl} 
+        />
+        <CodeNotAvailablePopup 
+          isOpen={codeNotAvailablePopupOpen} 
+          onClose={() => setCodeNotAvailablePopupOpen(false)} 
+        />
+        {currentProjectDetails && (
+          <DescriptionPopup 
+            isOpen={descriptionPopupOpen}
+            onClose={() => setDescriptionPopupOpen(false)}
+            title={currentProjectDetails.title}
+            description={currentProjectDetails.description}
+          />
+        )}
+      </div>
 
       <style jsx>{`
         :global(body) {

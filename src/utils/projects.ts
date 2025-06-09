@@ -67,7 +67,7 @@ export const getProjects = (language: 'es' | 'en'): Project[] => {
         : 'Real-time transcription web app that generates reports in various formats.',
       image: '/projects/images/rtt.png',
       technologies: ['React', 'FastAPI', 'Tailwind', 'WebSockets'],
-      videoUrl: '/videos/rtt.mp4',
+      videoUrl: '/projects/videos/rtt.mp4',
       codeUrl: 'https://github.com/nicogcf2007/rtm-transcriptions'
     },
   ];

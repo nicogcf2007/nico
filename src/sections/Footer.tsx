@@ -197,9 +197,6 @@ const Footer: React.FC = () => {
       
       <div className="relative z-10 px-4 mx-auto max-w-4xl">
         <div className="flex flex-col items-center gap-4">
-          <h3 ref={authorRef} className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent-light to-border-accent" style={{ opacity: 0 }}>
-            {t.footer.author}
-          </h3>
           
           <div ref={madeWithRef} className="flex items-center gap-2 text-text-secondary text-sm" style={{ opacity: 0 }}>
             <span>{t.footer.madeWith.text1}</span>
