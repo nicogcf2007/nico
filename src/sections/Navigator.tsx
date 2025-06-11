@@ -73,7 +73,7 @@ const Navigator: React.FC = () => {
         
         <div className="flex items-center space-x-0 sm:space-x-1">
           {navigation.map((item) => (
-            <a key={item.id} href={`#${item.id}`} onClick={(e) => { e.preventDefault(); scrollToSection(item.id); }} className={`relative px-2 sm:px-3 py-2 text-[11px] sm:text-sm rounded-full transition-colors duration-200 text-text-secondary hover:text-text-primary ${activeSection === item.id ? 'bg-accent/80 text-text-primary' : ''}`}>
+            <a key={item.id} href={`#${item.id}`} onClick={(e) => { e.preventDefault(); scrollToSection(item.id); }} className={`relative px-1.5 sm:px-3 py-2 text-[13px] sm:text-sm rounded-full transition-colors duration-200 text-text-secondary hover:text-text-primary ${activeSection === item.id ? 'bg-accent/80 text-text-primary' : ''}`}>
               {item.label}
             </a>
           ))}
