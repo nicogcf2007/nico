@@ -3,6 +3,7 @@ import { useLanguage } from '../hooks/useLanguage';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
+import SectionBackground from '../components/SectionBackground';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,13 +144,18 @@ const Contact: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="contact" className="relative pt-20 pb-10 z-10">
-      <div className="px-4 mx-auto max-w-4xl text-center">
-        <h2 ref={titleRef} className="mb-12 text-3xl font-bold text-center md:text-4xl text-text-primary" style={{ opacity: 0 }}>
-          {t.contact.title}
-        </h2>
-        
-        <div ref={containerRef} className="p-8 rounded-lg border shadow-md transition-all duration-300 bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg" style={{ opacity: 0 }}>
+    <section ref={sectionRef} id="contact" className="w-full" style={{ opacity: 0 }}>
+      <div className="relative text-center py-16 md:py-24">
+        <SectionBackground />
+        <div className="relative z-10 max-w-4xl mx-auto px-4">
+          <h2 ref={titleRef} className="text-3xl font-bold text-text-primary sm:text-4xl" style={{ opacity: 0 }}>
+            {t.contact.title}
+          </h2>
+        </div>
+      </div>
+
+      <div className="w-full max-w-4xl mx-auto px-4 pb-16 md:pb-24 -mt-12 md:-mt-16">
+        <div ref={containerRef} className="p-8 rounded-lg border shadow-md transition-all duration-300 bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg flex flex-col items-center" style={{ opacity: 0 }}>
           <p ref={descriptionRef} className="mb-8 text-text-secondary text-lg" style={{ opacity: 0 }}>
             {t.contact.description}
           </p>

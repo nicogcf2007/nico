@@ -69,7 +69,7 @@ const Navigator: React.FC = () => {
   return (
     <div className="flex fixed top-0 right-0 left-0 z-40 justify-center pt-2 px-2">
       <nav ref={navRef} className="relative flex items-center px-1 py-1 sm:py-1.5 space-x-1 rounded-full shadow-md">
-        <div ref={backgroundRef} className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-full -z-20" />
+        <div ref={backgroundRef} className="absolute inset-0 bg-background/30 backdrop-blur-lg rounded-full -z-20" />
         
         <div className="flex items-center space-x-0 sm:space-x-1">
           {navigation.map((item) => (

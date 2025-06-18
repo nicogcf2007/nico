@@ -139,7 +139,7 @@ const translations: LanguageTranslations = {
         {
           role: "Professional Internship",
           company: "Centro Nacional de Consultoría (CNC)",
-          date: "Jan 2023 - Jan 2024",
+          date: "Apr 2024 - May 2025",
           responsibilities: [
             "Contributed to the maintenance and development of web applications using React.js, PHP, and Python (Django, FastAPI).",
             "Worked in a multidisciplinary team, collaborating with designers and managers to deliver effective solutions.",
@@ -148,23 +148,23 @@ const translations: LanguageTranslations = {
           ]
         },
         {
-          role: "Full Stack Developer",
-          company: "ColCambios",
-          date: "Jun 2022 - Dec 2022",
-          responsibilities: [
-            "Modernized the company's currency exchange platform, migrating from a legacy system to a React.js and Node.js stack.",
-            "Developed a cross-platform mobile application with React Native for internal administrative management.",
-            "Handled both frontend (React.js) and backend (Node.js, Express.js) tasks in a two-person team."
-          ]
-        },
-        {
           role: "Freelance Developer",
           company: "Independent Projects",
-          date: "2021 - Present",
+          date: "Jan 2024 - Present",
           responsibilities: [
             "Created automation bots and scripts to streamline repetitive tasks for various clients.",
             "Developed custom applications for advanced PDF manipulation and data extraction.",
             "Managed client communication, requirement gathering, and project delivery from start to finish."
+          ]
+        },
+        {
+          role: "Full Stack Developer",
+          company: "ColCambios",
+          date: "Oct 2022 - Nov 2023",
+          responsibilities: [
+            "Modernized the company's currency exchange platform, migrating from a legacy system to a React.js and Node.js stack.",
+            "Developed a cross-platform mobile application with React Native for internal administrative management.",
+            "Handled both frontend (React.js) and backend (Node.js, Express.js) tasks in a two-person team."
           ]
         }
       ],
@@ -262,7 +262,7 @@ const translations: LanguageTranslations = {
         {
           role: "Prácticas Profesionales",
           company: "Centro Nacional de Consultoría (CNC)",
-          date: "Ene 2023 - Ene 2024",
+          date: "Abr 2024 - May 2025",
           responsibilities: [
             "Contribuí al mantenimiento y desarrollo de aplicaciones web usando React.js, PHP y Python (Django, FastAPI).",
             "Trabajé en un equipo multidisciplinar, colaborando con diseñadores y gerentes para entregar soluciones efectivas.",
@@ -271,23 +271,23 @@ const translations: LanguageTranslations = {
           ]
         },
         {
+          role: "Desarrollador Freelance",
+          company: "Proyectos Independientes",
+          date: "Ene 2024 - Presente",
+          responsibilities: [
+            "Creación de bots y scripts de automatización para optimizar tareas repetitivas de diversos clientes.",
+            "Desarrollo de aplicaciones a medida para la manipulación avanzada de PDFs y extracción de datos.",
+            "Gestión de la comunicación con clientes, levantamiento de requisitos y entrega de proyectos de principio a fin."
+          ]
+        },
+        {
           role: "Desarrollador Full Stack",
           company: "ColCambios",
-          date: "Jun 2022 - Dic 2022",
+          date: "Oct 2022 - Nov 2023",
           responsibilities: [
             "Modernicé la plataforma de cambio de divisas de la empresa, migrando de un sistema legado a un stack con React.js y Node.js.",
             "Desarrollé una aplicación móvil multiplataforma con React Native para la gestión administrativa interna.",
             "Manejé tareas tanto de frontend (React.js) como de backend (Node.js, Express.js) en un equipo de dos personas."
-          ]
-        },
-        {
-          role: "Desarrollador Freelance",
-          company: "Proyectos Independientes",
-          date: "2021 - Actualidad",
-          responsibilities: [
-            "Creé bots y scripts de automatización para agilizar tareas repetitivas para diversos clientes.",
-            "Desarrollé aplicaciones a medida para la manipulación avanzada de PDF y extracción de datos.",
-            "Gestioné de forma autónoma la comunicación con clientes, la recopilación de requisitos y la entrega de proyectos."
           ]
         }
       ],

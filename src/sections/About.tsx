@@ -5,6 +5,8 @@ import { ExperienceDetail } from '../utils/translations';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
+import SectionBackground from '../components/SectionBackground';
+import { Code, Smartphone, Server, Database, Wrench, BrainCircuit } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,32 +24,32 @@ const About: React.FC = () => {
     {
       title: t.about.skillCategories?.webFrontend ?? "Web Frontend",
       skills: ['React.js', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'HTML', 'CSS'],
-      icon: <span className="text-xl">💻</span>
+      icon: <Code size={24} />
     },
     {
       title: t.about.skillCategories?.appDevelopment ?? "Application Development",
       skills: ['React Native', 'Expo', 'Solito', 'Tamagui', 'Electron'],
-      icon: <span className="text-xl">📱</span>
+      icon: <Smartphone size={24} />
     },
     {
       title: t.about.skillCategories?.backend ?? "Backend",
       skills: ['Node.js', 'Express.js', 'WebSockets', 'FastAPI', 'Django REST framework', 'Python', 'PHP'],
-      icon: <span className="text-xl">⚙️</span>
+      icon: <Server size={24} />
     },
     {
       title: t.about.skillCategories?.databases ?? "Databases & BaaS",
       skills: ['MySQL', 'PostgreSQL', 'MongoDB', 'Supabase', 'DBeaver Community'],
-      icon: <span className="text-xl">🗄️</span>
+      icon: <Database size={24} />
     },
     {
       title: t.about.skillCategories?.devopsPlatforms ?? "DevOps & Platforms",
       skills: ['Git', 'Docker', 'Amazon Web Services (AWS)', 'Linux', 'SSH', 'Postman', 'n8n', 'WordPress'],
-      icon: <span className="text-xl">🛠️</span>
+      icon: <Wrench size={24} />
     },
     {
       title: t.about.skillCategories.softSkills,
       skills: t.about.softSkillsList,
-      icon: <span className="text-xl">🧠</span>
+      icon: <BrainCircuit size={24} />
     },
   ];
 
@@ -254,25 +256,28 @@ const About: React.FC = () => {
     <section 
       ref={sectionRef} 
       id="about" 
-      className="py-24 px-4 sm:py-32" 
+      className="w-full" 
+      style={{ opacity: 0 }}
     >
-      <div className="mx-auto max-w-6xl">
-        {/* Título */}
-        <div className="text-center mb-12">
-          <h2 ref={titleRef} className="text-3xl sm:text-4xl md:text-5xl font-bold text-text-primary">
-            {t.about.title}
-          </h2>
-          <p ref={descriptionRef} className="mt-4 text-base sm:text-lg text-text-secondary max-w-3xl mx-auto">
-            {t.about.description}
-          </p>
+      <div className="relative text-center py-16 md:py-24">
+        <SectionBackground />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 ref={titleRef} className="text-3xl font-bold text-text-primary sm:text-4xl md:text-5xl" style={{ opacity: 0 }}>
+                {t.about.title}
+            </h2>
         </div>
+      </div>
 
-        {/* Sección de Habilidades */}
-        <div className="mb-20">
-          <h3 ref={skillsTitleRef} className="text-2xl sm:text-3xl font-bold text-center mb-8 text-text-primary">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24 -mt-16 md:-mt-24">
+        <p ref={descriptionRef} className="text-lg text-text-secondary mx-auto max-w-3xl text-center mb-12 md:mb-16" style={{ opacity: 0 }}>
+          {t.about.description}
+        </p>
+        
+        <div className="mb-16 md:mb-24">
+          <h3 ref={skillsTitleRef} className="text-2xl font-bold text-text-primary text-center mb-8 md:mb-12 sm:text-3xl" style={{ opacity: 0 }}>
             {t.about.skillsTitle}
           </h3>
-          <div ref={skillsGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div ref={skillsGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {skillData.map((category) => (
               <SkillCard
                 key={category.title}
@@ -285,43 +290,40 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Sección de Experiencia */}
         <div>
-          <h3 ref={experienceTitleRef} className="text-2xl sm:text-3xl font-bold text-center mb-10 text-text-primary">
+          <h3 ref={experienceTitleRef} className="text-2xl font-bold text-text-primary text-center mb-8 md:mb-12 sm:text-3xl" style={{ opacity: 0 }}>
             {t.about.experienceTitle}
           </h3>
-          <div ref={experienceContainerRef} className="relative space-y-12">
-            {/* Línea de tiempo vertical */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-border hidden md:block"></div>
-
-            {experienceDetails.map((exp, index) => (
+          <div ref={experienceContainerRef} className="relative space-y-12 md:space-y-0">
+            {/* Vertical timeline */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
+            
+            {experienceDetails.map((job, index) => (
               <div
                 key={index}
                 className={`gsap-experience-card md:flex items-center w-full ${
-                  index % 2 === 0 ? 'md:flex-row-reverse' : ''
+                  index % 2 === 0 ? '' : 'md:flex-row-reverse'
                 }`}
               >
-                {/* Contenido de la tarjeta */}
-                <div className={`w-full md:w-5/12 p-6 bg-surface rounded-lg shadow-lg border border-transparent hover:border-border-accent/50 transition-colors duration-300 ${
-                  index % 2 === 0 ? 'md:pl-10' : 'md:pr-10'
-                }`}>
-                  <h4 className="text-xl font-bold text-text-primary">{exp.role}</h4>
-                  <p className="text-md text-accent-light mb-2">{exp.company}</p>
-                  <p className="text-sm text-text-secondary mb-3">{exp.date}</p>
+                {/* Spacer for alignment */}
+                <div className="hidden md:block w-5/12" />
+                
+                {/* Dot on timeline */}
+                <div className="hidden md:flex w-2/12 justify-center">
+                  <div className="w-4 h-4 rounded-full bg-accent-light border-4 border-background z-10" />
+                </div>
+                
+                {/* Card content */}
+                <div className="w-full md:w-5/12 p-6 bg-surface rounded-lg shadow-lg border border-transparent hover:border-border-accent/50 transition-colors duration-300">
+                  <h4 className="text-xl font-bold text-text-primary">{job.role}</h4>
+                  <p className="text-md text-accent-light mb-2">{job.company}</p>
+                  <p className="text-sm text-text-secondary mb-3">{job.date}</p>
                   <ul className="list-disc list-inside text-sm text-text-secondary space-y-1">
-                    {exp.responsibilities.map((resp, i) => (
+                    {job.responsibilities.map((resp, i) => (
                       <li key={i}>{resp}</li>
                     ))}
                   </ul>
                 </div>
-
-                {/* Punto en la línea de tiempo (escritorio) */}
-                <div className="hidden md:flex justify-center w-2/12">
-                  <div className="w-4 h-4 rounded-full bg-accent border-2 border-background shadow-md"></div>
-                </div>
-
-                {/* Espacio en blanco (escritorio) */}
-                <div className="hidden md:block w-5/12"></div>
               </div>
             ))}
           </div>
