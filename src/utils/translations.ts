@@ -132,7 +132,7 @@ const translations: LanguageTranslations = {
     },
     about: {
       title: "About Me",
-      description: "I'm a developer passionate about creating unique and functional digital experiences. With experience in full stack web development, I specialize in building robust and scalable applications.",
+      description: "I'm a passionate full stack developer focused on creating innovative and efficient digital solutions. My experience spans web development, cross-platform mobile applications, and process automation, building robust systems that optimize productivity and enhance user experience.",
       skillsTitle: "My Skills",
       experienceTitle: "Professional Experience",
       experienceDetails: [
@@ -255,7 +255,7 @@ const translations: LanguageTranslations = {
     },
     about: {
       title: "Sobre Mí",
-      description: "Soy un desarrollador apasionado por crear experiencias digitales únicas y funcionales. Con experiencia en desarrollo web full stack, me especializo en construir aplicaciones robustas y escalables.",
+      description: "Soy un desarrollador full stack apasionado por crear soluciones digitales innovadoras y eficientes. Mi experiencia abarca desarrollo web, aplicaciones móviles multiplataforma y automatización de procesos, construyendo sistemas robustos que optimizan la productividad y mejoran la experiencia del usuario.",
       skillsTitle: "Mis Habilidades",
       experienceTitle: "Experiencia Profesional",
       experienceDetails: [
