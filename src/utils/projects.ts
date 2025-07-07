@@ -22,13 +22,13 @@ export const getProjects = (language: 'es' | 'en'): Project[] => {
       id: 1,
       title: language === 'es' ? 'ColCambios' : 'ColCambios',
       description: language === 'es' 
-        ? 'Remodelación completa del frontend y backend de una plataforma de intercambio de divisas. Trabajé en colaboración con otro desarrollador para modernizar la interfaz y mejorar la funcionalidad del sistema.' 
-        : 'Complete redesign of the frontend and backend for a currency exchange platform. I worked collaboratively with another developer to modernize the interface and improve the system functionality.',
+        ? 'Remodelación completa del frontend y backend de una plataforma de intercambio de divisas. Desarrollé una aplicación móvil React Native para administración y construí un complejo sistema en tiempo real para obtener tasas de cambio con alta precisión. Colaboración efectiva con otro desarrollador en el equipo.' 
+        : 'Complete frontend and backend remodeling of a currency exchange platform. Developed a React Native mobile app for administration and built a complex real-time system to obtain exchange rates with high precision. Effective collaboration with another developer on the team.',
       shortDescription: language === 'es'
-        ? 'Remodelación de una plataforma de cambio de divisas, modernizando su interfaz y funcionalidad.'
-        : 'Redesign of a currency exchange platform, modernizing its interface and functionality.',
+        ? 'Plataforma de intercambio de divisas con sistema de tasas en tiempo real y app móvil para administración.'
+        : 'Currency exchange platform with real-time rates system and mobile app for administration.',
       image: '/projects/images/colcambios.png',
-      technologies: ['React', 'Node', 'MySQL', 'Express','TypeScript'],
+      technologies: ['React', 'React Native', 'Node', 'MySQL', 'Express', 'TypeScript'],
       demoUrl: 'https://colcambios.com/',
     },
     {
