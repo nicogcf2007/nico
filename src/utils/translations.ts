@@ -162,9 +162,10 @@ const translations: LanguageTranslations = {
           company: "ColCambios",
           date: "Oct 2022 - Nov 2023",
           responsibilities: [
-            "Modernized the company's currency exchange platform, migrating from a legacy system to a React.js and Node.js stack.",
-            "Developed a cross-platform mobile application with React Native for internal administrative management.",
-            "Handled both frontend (React.js) and backend (Node.js, Express.js) tasks in a two-person team."
+            "Complete frontend and backend remodeling of a currency exchange platform. Collaborated with another developer to modernize the interface and improve system functionality.",
+            "Developed a cross-platform mobile application with React Native for web administration management.",
+            "Built a complex real-time system to obtain exchange rates against different currencies with high precision and real-time updates.",
+            "Handled both frontend (React.js) and backend (Node.js, Express.js) tasks in a two-person collaborative team."
           ]
         }
       ],
@@ -285,9 +286,10 @@ const translations: LanguageTranslations = {
           company: "ColCambios",
           date: "Oct 2022 - Nov 2023",
           responsibilities: [
-            "Modernicé la plataforma de cambio de divisas de la empresa, migrando de un sistema legado a un stack con React.js y Node.js.",
-            "Desarrollé una aplicación móvil multiplataforma con React Native para la gestión administrativa interna.",
-            "Manejé tareas tanto de frontend (React.js) como de backend (Node.js, Express.js) en un equipo de dos personas."
+            "Remodelación completa del frontend y backend de una plataforma de intercambio de divisas. Trabajé en colaboración con otro desarrollador para modernizar la interfaz y mejorar la funcionalidad del sistema.",
+            "Desarrollé una aplicación móvil multiplataforma con React Native para la administración de la web.",
+            "Construí un complejo sistema en tiempo real para obtener la tasa de cambio frente a diferentes divisas con alta precisión y actualizaciones en tiempo real.",
+            "Manejé tareas tanto de frontend (React.js) como de backend (Node.js, Express.js) en un equipo colaborativo de dos personas."
           ]
         }
       ],
