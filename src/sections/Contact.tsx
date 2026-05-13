@@ -5,7 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
 import SectionBackground from '../components/SectionBackground';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const Contact: React.FC = () => {
   const { t } = useLanguage();
@@ -149,11 +151,11 @@ const Contact: React.FC = () => {
         <SectionBackground />
         <div className="relative z-10 max-w-4xl mx-auto px-4">
           <h2 ref={titleRef} className="text-3xl font-bold text-text-primary sm:text-4xl" style={{ opacity: 0 }}>
-            {t.contact.title}
-          </h2>
+          {t.contact.title}
+        </h2>
         </div>
       </div>
-
+        
       <div className="w-full max-w-4xl mx-auto px-4 pb-16 md:pb-24 -mt-12 md:-mt-16">
         <div ref={containerRef} className="p-8 rounded-lg border shadow-md transition-all duration-300 bg-surface/50 border-border hover:border-accent/70 hover:shadow-lg flex flex-col items-center" style={{ opacity: 0 }}>
           <p ref={descriptionRef} className="mb-8 text-text-secondary text-lg" style={{ opacity: 0 }}>

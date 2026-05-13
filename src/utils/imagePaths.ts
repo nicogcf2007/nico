@@ -1,35 +1,44 @@
 /**
- * Utilidad para manejar rutas de imágenes en Next.js con basePath
+ * Utilidad para manejar rutas de assets con basePath de Astro
  */
 
-/**
- * Obtiene la ruta correcta para una imagen considerando el basePath de Next.js
- */
-export const getImagePath = (imagePath: string | { src: string } | any): string => {
-  // Si es un objeto de Next.js con src, extraer la propiedad src
-  if (imagePath && typeof imagePath === 'object' && imagePath.src) {
-    return imagePath.src;
+const getBase = () => {
+  try {
+    return import.meta.env.BASE_URL || '';
+  } catch {
+    return '';
   }
-  
-  // Validar que imagePath sea un string válido
+};
+
+export const getAssetPath = (assetPath: string): string => {
+  if (!assetPath || typeof assetPath !== 'string') {
+    return assetPath;
+  }
+
+  if (assetPath.startsWith('http') || assetPath.startsWith('data:') || assetPath.startsWith('//')) {
+    return assetPath;
+  }
+
+  const base = getBase();
+  const normalizedBase = base.endsWith('/') ? base.slice(0, -1) : base;
+
+  if (normalizedBase && !assetPath.startsWith(normalizedBase)) {
+    return `${normalizedBase}${assetPath}`;
+  }
+  return assetPath;
+};
+
+export const getImagePath = (imagePath: string | any): string => {
+  if (imagePath && typeof imagePath === 'object' && imagePath.src) {
+    return getAssetPath(imagePath.src);
+  }
+
   if (!imagePath || typeof imagePath !== 'string') {
     console.warn('getImagePath received invalid imagePath:', imagePath);
-    return '/images/logo2.png'; // Imagen por defecto
+    return getAssetPath('/images/logo2.png');
   }
-  
-  // Si ya es una URL completa, data URL o protocolo relativo, no modificar
-  if (imagePath.startsWith('http') || imagePath.startsWith('data:') || imagePath.startsWith('//')) {
-    return imagePath;
-  }
-  
-  // En desarrollo, usar la ruta directa
-  if (process.env.NODE_ENV === 'development') {
-    return imagePath;
-  }
-  
-  // En producción, aplicar el basePath
-  const basePath = '/NRDev';
-  return `${basePath}${imagePath}`;
+
+  return getAssetPath(imagePath);
 };
 
 /**

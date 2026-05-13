@@ -10,22 +10,23 @@ export default function SmoothScroll() {
     const lenis = new Lenis({
       duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    })
+    });
 
-    // Conecta Lenis con ScrollTrigger de GSAP para que las animaciones se sincronicen
-    lenis.on('scroll', ScrollTrigger.update)
+    (window as any).lenis = lenis;
 
-    // Asegura que Lenis se actualice en cada frame de animación de GSAP
+    lenis.on('scroll', ScrollTrigger.update);
+
     gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
+      lenis.raf(time * 1000);
+    });
 
-    gsap.ticker.lagSmoothing(0)
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      lenis.destroy()
-    }
-  }, [])
+      (window as any).lenis = undefined;
+      lenis.destroy();
+    };
+  }, []);
 
-  return null
-} 
+  return null;
+}

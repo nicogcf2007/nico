@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import NoSSR from '../components/NoSSR';
 import { useIsMobile } from '../utils/deviceDetection';
 import gsap from 'gsap';
 
-// Importación dinámica para evitar problemas con SSR
-const ThreeJSParticles = dynamic(() => import('../components/ThreeJSParticles'), { ssr: false });
+const ThreeJSParticles = lazy(() => import('../components/ThreeJSParticles'));
 
 // --- Types ---
 interface DataRefType {
@@ -189,7 +187,9 @@ const Background = () => {
             
             <NoSSR>
                 <div className="absolute inset-0 z-10 pointer-events-none">
-                    <ThreeJSParticles propsRef={threeJsPropsRef} />
+                    <Suspense fallback={null}>
+                        <ThreeJSParticles propsRef={threeJsPropsRef} />
+                    </Suspense>
                 </div>
                 <div className="absolute inset-0 pointer-events-none">
                     {Object.values(configs).map(config => (

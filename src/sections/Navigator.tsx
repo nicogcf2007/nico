@@ -5,9 +5,12 @@ import { Globe, FileText } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLanguage } from '../hooks/useLanguage';
+import { getAssetPath } from '../utils/imagePaths';
 import Lenis from 'lenis';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const Navigator: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -82,7 +85,7 @@ const Navigator: React.FC = () => {
         <div className="w-px h-6 bg-border mx-1" />
         
         <div className="flex items-center space-x-1">
-          <a href="/cv.pdf" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">
+          <a href={getAssetPath('/cv.pdf')} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">
             <FileText size={16} />
           </a>
           <button onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors">

@@ -213,7 +213,7 @@ const translations: LanguageTranslations = {
         text3: "and"
       },
       builtWith: "Built with",
-      technologies: "Next.js, TypeScript, Three.js, Tailwind CSS, Lenis & GSAP",
+      technologies: "Astro, TypeScript, Three.js, Tailwind CSS, Lenis & GSAP",
       author: "Nicolas Rivera",
       backToTop: "Back to Top"
     },
@@ -337,7 +337,7 @@ const translations: LanguageTranslations = {
         text3: "y"
       },
       builtWith: "Desarrollado con",
-      technologies: "Next.js, TypeScript, Three.js, Tailwind CSS, Lenis y GSAP",
+      technologies: "Astro, TypeScript, Three.js, Tailwind CSS, Lenis y GSAP",
       author: "Nicolas Rivera",
       backToTop: "Volver al Inicio"
     },

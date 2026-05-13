@@ -8,7 +8,9 @@ import { isMobileDevice } from '../utils/deviceDetection';
 import SectionBackground from '../components/SectionBackground';
 import { Code, Smartphone, Server, Database, Wrench, BrainCircuit } from 'lucide-react';
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const About: React.FC = () => {
   const { t } = useLanguage();
@@ -263,8 +265,8 @@ const About: React.FC = () => {
         <SectionBackground />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 ref={titleRef} className="text-3xl font-bold text-text-primary sm:text-4xl md:text-5xl" style={{ opacity: 0 }}>
-                {t.about.title}
-            </h2>
+            {t.about.title}
+          </h2>
         </div>
       </div>
 
@@ -297,7 +299,7 @@ const About: React.FC = () => {
           <div ref={experienceContainerRef} className="relative space-y-12 md:space-y-0">
             {/* Vertical timeline */}
             <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
-            
+
             {experienceDetails.map((job, index) => (
               <div
                 key={index}

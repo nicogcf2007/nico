@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import socialLinks from '../utils/contacts';
 import { useLanguage } from '../hooks/useLanguage';
+import { getAssetPath } from '../utils/imagePaths';
 import { Download, Eye, Mail, ChevronDown } from 'lucide-react';
 // @ts-ignore
 import gsap from 'gsap';
@@ -140,7 +141,7 @@ const Hero: React.FC = () => {
             </button>
             
             <a
-              href="/cv.pdf"
+              href={getAssetPath('/cv.pdf')}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex w-full items-center justify-center gap-2 rounded-lg bg-surface px-5 py-2.5 text-sm text-text-primary transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-border sm:w-auto sm:px-6 sm:py-3 sm:text-base"

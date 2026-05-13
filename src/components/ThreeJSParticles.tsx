@@ -14,8 +14,8 @@ const getOptimizedConfig = () => {
         velocityMultiplier: isLowEnd ? 0.2 : isMobile ? 0.3 : 0.4,
         scrollMultiplier: isLowEnd ? 0.004 : isMobile ? 0.006 : 0.008,
         mouseMultiplier: isLowEnd ? 0.03 : isMobile ? 0.045 : 0.09,
-        pixelRatio: Math.min(window.devicePixelRatio, isLowEnd ? 1 : isMobile ? 1.2 : 1.5),
-        maxFPS: isLowEnd ? 25 : isMobile ? 45 : 60,
+        pixelRatio: Math.min(window.devicePixelRatio, 2),
+        maxFPS: isMobile ? 30 : 60,
         zRange: isLowEnd ? 120 : isMobile ? 150 : 180,
     };
 };
@@ -104,15 +104,28 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
         const stars = new THREE.Points(geometry, material);
         scene.add(stars);
 
+        let isVisible = true;
         let lastFrameTime = -1;
         let frameCount = 0;
         let lastLogTime = performance.now();
+
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                isVisible = false;
+                cancelAnimationFrame(animationId);
+            } else {
+                isVisible = true;
+                lastFrameTime = -1;
+                animate(performance.now());
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         // --- Bucle de Animación ---
         const animate = (time: number) => {
             animationId = requestAnimationFrame(animate);
 
-            if (!propsRef.current || document.hidden) return;
+            if (!propsRef.current || !isVisible) return;
 
             const now = performance.now();
             frameCount++;
@@ -171,9 +184,9 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
         return () => {
             console.log('[ThreeJSParticles] 🧹 Component unmounted & Three.js resources cleaned up');
             cancelAnimationFrame(animationId);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('resize', handleResize);
 
-            // Vaciar y destruir la escena de Three.js
             scene.traverse(object => {
                 if (object instanceof THREE.Mesh || object instanceof THREE.Points) {
                     if (object.geometry) object.geometry.dispose();
@@ -187,11 +200,11 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
                 }
             });
             scene.clear();
-            
+
             renderer.dispose();
             renderer.forceContextLoss();
 
-            if (parentElement.contains(renderer.domElement)) {
+            if (parentElement && renderer.domElement && parentElement.contains(renderer.domElement)) {
                 parentElement.removeChild(renderer.domElement);
             }
         };
