@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { getProjects, Project } from '../utils/projects';
 import { VideoPopup, CodeNotAvailablePopup, ImagePopup, DescriptionPopup } from '../components/PopUps';
 import OptimizedImage from '../components/OptimizedImage';
+import SplitText from '../components/SplitText';
 import { ExternalLink, Video, Github, ArrowUpRight, Play, Code2, BookOpen } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useHorizontalScroll } from '../hooks/useHorizontalScroll';
@@ -167,9 +168,13 @@ const Projects: React.FC = () => {
         
         <div className="mx-auto relative z-10">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl text-text-primary px-4 max-w-7xl mx-auto">
-              {t.projects.title}
-            </h2>
+              <SplitText
+                text={t.projects.title}
+                as="h2"
+                className="mb-4 text-3xl font-bold md:text-4xl text-text-primary px-4 max-w-7xl mx-auto"
+                stagger={0.025}
+                duration={0.5}
+              />
           </div>
         </div>
       </div>

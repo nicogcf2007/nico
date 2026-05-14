@@ -4,6 +4,7 @@ import { Heart, Code, Coffee, ArrowUp } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
+import TechMarquee from '../components/TechMarquee';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -211,8 +212,8 @@ const Footer: React.FC = () => {
           
           <div ref={dividerRef} className="w-24 h-px bg-gradient-to-r from-transparent via-border-accent/50 to-transparent my-2" style={{ opacity: 0 }}></div>
           
-          <div ref={techRef} className="text-xs text-text-secondary/80" style={{ opacity: 0 }}>
-            <p>{t.footer.builtWith} <span className="font-semibold text-text-secondary">{t.footer.technologies}</span></p>
+          <div ref={techRef} className="w-full text-xs text-text-secondary/80" style={{ opacity: 0 }}>
+            <TechMarquee />
           </div>
           
           {/* Botón de volver al inicio */}

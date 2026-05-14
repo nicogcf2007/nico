@@ -4,7 +4,6 @@ import { useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { isMobileDevice, isLowEndDevice } from '../utils/deviceDetection';
 
-// --- Configuración Optimizada ---
 const getOptimizedConfig = () => {
     const isMobile = isMobileDevice();
     const isLowEnd = isLowEndDevice();
@@ -20,7 +19,6 @@ const getOptimizedConfig = () => {
     };
 };
 
-// --- Types ---
 interface ThreeJSProps {
     mousePosition: { x: number; y: number };
     scrollProgress: number;
@@ -30,19 +28,16 @@ interface ThreeJSParticlesProps {
     propsRef: React.RefObject<ThreeJSProps>;
 }
 
-// --- Componente Principal ---
 const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const config = useMemo(() => getOptimizedConfig(), []);
 
     useEffect(() => {
-        console.log('[ThreeJSParticles] ✨ Component mounted & Three.js scene initialized');
         if (!containerRef.current) return;
 
         let animationId: number;
         const parentElement = containerRef.current;
-        
-        // --- Inicialización ---
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
         camera.position.z = 4;
@@ -59,41 +54,70 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
         const positions = new Float32Array(config.particleCount * 3);
         const sizes = new Float32Array(config.particleCount);
         const velocities = new Float32Array(config.particleCount * 3);
+        const basePositions = new Float32Array(config.particleCount * 3);
+        const twinkleOffsets = new Float32Array(config.particleCount);
 
         const Z_POS_MIN_LOCAL = -config.zRange;
         const SPREAD_XY = config.spread;
 
         for (let i = 0; i < config.particleCount; i++) {
             const i3 = i * 3;
-            positions[i3] = (Math.random() - 0.5) * SPREAD_XY;
-            positions[i3 + 1] = (Math.random() - 0.5) * SPREAD_XY;
-            positions[i3 + 2] = Math.random() * Z_POS_MIN_LOCAL;
+            const x = (Math.random() - 0.5) * SPREAD_XY;
+            const y = (Math.random() - 0.5) * SPREAD_XY;
+            const z = Math.random() * Z_POS_MIN_LOCAL;
+            positions[i3] = x;
+            positions[i3 + 1] = y;
+            positions[i3 + 2] = z;
+            basePositions[i3] = x;
+            basePositions[i3 + 1] = y;
+            basePositions[i3 + 2] = z;
             sizes[i] = Math.random() * 3.5 + 1.5;
-            
+
             const baseVelocity = 0.002 * config.velocityMultiplier;
             velocities[i3] = (Math.random() - 0.5) * baseVelocity;
             velocities[i3 + 1] = (Math.random() - 0.5) * baseVelocity;
             velocities[i3 + 2] = (0.015 + Math.random() * 0.02) * config.velocityMultiplier;
+
+            twinkleOffsets[i] = Math.random() * Math.PI * 2;
         }
 
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-        
+
+        const uniforms = {
+            uTime: { value: 0 },
+            uScroll: { value: 0 },
+            uTwinkle: { value: new Float32Array(twinkleOffsets) },
+        };
+
         const material = new THREE.ShaderMaterial({
+            uniforms,
             vertexShader: `
                 attribute float size;
+                uniform float uTime;
+                uniform float uScroll;
                 void main() {
                     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                    gl_PointSize = size * (90.0 / -mvPosition.z);
+                    float twinkle = 0.6 + 0.4 * sin(uTime * 2.0 + position.x * 3.0 + position.y * 5.0);
+                    float colorMix = 0.4 + 0.6 * uScroll;
+                    gl_PointSize = size * twinkle * (90.0 / -mvPosition.z);
                     gl_Position = projectionMatrix * mvPosition;
                 }
             `,
             fragmentShader: `
+                uniform float uScroll;
                 void main() {
                     float dist = distance(gl_PointCoord, vec2(0.5));
                     if (dist > 0.5) discard;
-                    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0 - smoothstep(0.0, 0.5, dist));
+                    float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+                    float colorMix = 0.4 + 0.6 * uScroll;
+                    vec3 color1 = vec3(1.0, 1.0, 1.0);
+                    vec3 color2 = vec3(0.6, 0.4, 1.0);
+                    vec3 color3 = vec3(0.3, 0.6, 1.0);
+                    vec3 color = mix(color1, color2, colorMix);
+                    color = mix(color, color3, smoothstep(0.5, 1.0, uScroll));
+                    gl_FragColor = vec4(color, alpha);
                 }
             `,
             transparent: true,
@@ -106,8 +130,7 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
 
         let isVisible = true;
         let lastFrameTime = -1;
-        let frameCount = 0;
-        let lastLogTime = performance.now();
+        let elapsedTime = 0;
 
         const handleVisibilityChange = () => {
             if (document.hidden) {
@@ -121,35 +144,28 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
-        // --- Bucle de Animación ---
         const animate = (time: number) => {
             animationId = requestAnimationFrame(animate);
-
             if (!propsRef.current || !isVisible) return;
 
             const now = performance.now();
-            frameCount++;
-            if (now - lastLogTime > 5000) { // Log every 5 seconds
-                const fps = frameCount / ((now - lastLogTime) / 1000);
-                console.log(`[ThreeJSParticles] rAF Loop FPS: ${fps.toFixed(2)}`);
-                frameCount = 0;
-                lastLogTime = now;
-            }
-
             const targetFrameTime = 1000 / config.maxFPS;
             const deltaTime = time - lastFrameTime;
-
             if (deltaTime < targetFrameTime) return;
-            
+
             lastFrameTime = time;
+            const dt = deltaTime / 16.67;
+            elapsedTime += dt * 0.02;
+
+            uniforms.uTime.value = elapsedTime;
+
             const positionAttribute = geometry.attributes.position as THREE.BufferAttribute;
 
-            const timeScale = deltaTime / 16.67;
             for (let i = 0; i < config.particleCount; i++) {
                 const i3 = i * 3;
-                positionAttribute.array[i3] += velocities[i3] * timeScale;
-                positionAttribute.array[i3 + 1] += velocities[i3 + 1] * timeScale;
-                positionAttribute.array[i3 + 2] += velocities[i3 + 2] * timeScale;
+                positionAttribute.array[i3] += velocities[i3] * dt;
+                positionAttribute.array[i3 + 1] += velocities[i3 + 1] * dt;
+                positionAttribute.array[i3 + 2] += velocities[i3 + 2] * dt;
 
                 if (stars.position.z + positionAttribute.array[i3 + 2] > camera.position.z + 10) {
                     positionAttribute.array[i3 + 2] = -config.zRange - Math.random() * 0.2;
@@ -158,7 +174,7 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
                 }
             }
             positionAttribute.needsUpdate = true;
-            
+
             const { mousePosition, scrollProgress } = propsRef.current;
             const zMin = -6;
             const zMax = 45;
@@ -167,22 +183,21 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
             stars.position.y = -mousePosition.y * config.mouseMultiplier;
             stars.position.z = zMin + (zMax - zMin) * scrollProgress;
 
+            uniforms.uScroll.value = scrollProgress;
+
             renderer.render(scene, camera);
         };
 
-        // --- Manejadores de Eventos ---
         const handleResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
         window.addEventListener('resize', handleResize, { passive: true });
-        
+
         animate(0);
 
-        // --- Limpieza ---
         return () => {
-            console.log('[ThreeJSParticles] 🧹 Component unmounted & Three.js resources cleaned up');
             cancelAnimationFrame(animationId);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('resize', handleResize);
@@ -213,4 +228,4 @@ const ThreeJSParticles: React.FC<ThreeJSParticlesProps> = ({ propsRef }) => {
     return <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />;
 };
 
-export default ThreeJSParticles; 
+export default ThreeJSParticles;
