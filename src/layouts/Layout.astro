@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
 import SmoothScroll from '../components/SmoothScroll';
-import CursorGlow from '../components/CursorGlow';
-import ReadingProgress from '../components/ReadingProgress';
 import Background from '../sections/Background';
 import PageContent from '../components/PageContent';
 
@@ -39,8 +37,6 @@ const base = Astro.base;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="overflow-x-hidden" style="font-family: 'Inter', sans-serif;">
-    <CursorGlow client:load />
-    <ReadingProgress client:load />
     <SmoothScroll client:load />
     <Background client:visible />
     <PageContent client:load />

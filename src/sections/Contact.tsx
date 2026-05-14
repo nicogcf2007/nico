@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
-import SplitText from '../components/SplitText';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isMobileDevice } from '../utils/deviceDetection';
@@ -151,13 +150,9 @@ const Contact: React.FC = () => {
       <div className="relative text-center py-16 md:py-24">
         <SectionBackground />
         <div className="relative z-10 max-w-4xl mx-auto px-4">
-          <SplitText
-              text={t.contact.title}
-              as="h2"
-              className="text-3xl font-bold text-text-primary sm:text-4xl"
-              stagger={0.03}
-              duration={0.5}
-            />
+          <h2 ref={titleRef} className="text-3xl font-bold text-text-primary sm:text-4xl" style={{ opacity: 0 }}>
+          {t.contact.title}
+        </h2>
         </div>
       </div>
         
